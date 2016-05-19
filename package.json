@@ -1,0 +1,19 @@
+{
+  "name": "react-redux-lib",
+  "version": "0.0.1",
+  "description": "Action and reducer infrastructure around Redux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travelytix/js-redux-lib.git"
+  },
+  "author": "Matthew Bunday (http://zencephalon.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Travelytix/js-redux-lib/issues"
+  },
+  "homepage": "https://github.com/Travelytix/js-redux-lib#readme"
+}
