@@ -1,7 +1,7 @@
-import api from './api'
-import httpReducer from './httpReducer'
-import neoActions from './neoActions'
-import neoActionTypes from './neoActionTypes'
+import * as api from './api'
+import * as httpReducer from './httpReducer'
+import * as neoActions from './neoActions'
+import * as neoActionTypes from './neoActionTypes'
 
 module.exports = {
   api,

@@ -2,25 +2,25 @@
 
 var _api = require('./api');
 
-var _api2 = _interopRequireDefault(_api);
+var api = _interopRequireWildcard(_api);
 
 var _httpReducer = require('./httpReducer');
 
-var _httpReducer2 = _interopRequireDefault(_httpReducer);
+var httpReducer = _interopRequireWildcard(_httpReducer);
 
 var _neoActions = require('./neoActions');
 
-var _neoActions2 = _interopRequireDefault(_neoActions);
+var neoActions = _interopRequireWildcard(_neoActions);
 
 var _neoActionTypes = require('./neoActionTypes');
 
-var _neoActionTypes2 = _interopRequireDefault(_neoActionTypes);
+var neoActionTypes = _interopRequireWildcard(_neoActionTypes);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 module.exports = {
-  api: _api2.default,
-  httpReducer: _httpReducer2.default,
-  neoActions: _neoActions2.default,
-  neoActionTypes: _neoActionTypes2.default
+  api: api,
+  httpReducer: httpReducer,
+  neoActions: neoActions,
+  neoActionTypes: neoActionTypes
 };
