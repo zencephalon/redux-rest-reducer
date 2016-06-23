@@ -8,7 +8,7 @@ export const neoActionTypes = (name) => {
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {
-    exportTypes[key] = `NEO/${name}/${key}`
+    exportTypes[key] = `${name}/${key}`
   })
 
   const requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX']
@@ -17,7 +17,7 @@ export const neoActionTypes = (name) => {
   requestTypes.forEach((type) => {
     var obj = {}
     statuses.forEach((status) => {
-      obj[status] = `NEO/${name}/${type}/${status}`
+      obj[status] = `${name}/${type}/${status}`
     })
     exportTypes[type] = obj
   })

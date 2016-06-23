@@ -1,11 +1,11 @@
 import * as api from './api'
 import * as httpReducer from './httpReducer'
-import * as neoActions from './neoActions'
-import * as neoActionTypes from './neoActionTypes'
+import * as actions from './actions'
+import * as actionTypes from './actionTypes'
 
 module.exports = {
   api,
   httpReducer,
-  neoActions,
-  neoActionTypes,
+  actions,
+  actionTypes,
 }
