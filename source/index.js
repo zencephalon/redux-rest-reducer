@@ -7,5 +7,5 @@ module.exports = {
   api,
   httpReducer,
   actions,
-  actionTypes,
+  actionTypes: actionTypes.default,
 }

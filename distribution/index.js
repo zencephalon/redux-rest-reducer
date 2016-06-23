@@ -22,5 +22,5 @@ module.exports = {
   api: api,
   httpReducer: httpReducer,
   actions: actions,
-  actionTypes: actionTypes
+  actionTypes: actionTypes.default
 };

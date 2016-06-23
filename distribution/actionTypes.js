@@ -7,7 +7,7 @@ var actionTypes = function actionTypes(name) {
   var actionTypes = ['INVALIDATE', 'SELECT', 'UNSELECT', 'SET_SELECT', 'SET_ADD_ANOTHER'];
   var exportTypes = {};
   actionTypes.forEach(function (key) {
-    exportTypes[key] = name + '/' + key;
+    exportTypes[key] = 'NEO/' + name + '/' + key;
   });
 
   var requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX'];
@@ -16,7 +16,7 @@ var actionTypes = function actionTypes(name) {
   requestTypes.forEach(function (type) {
     var obj = {};
     statuses.forEach(function (status) {
-      obj[status] = name + '/' + type + '/' + status;
+      obj[status] = 'NEO/' + name + '/' + type + '/' + status;
     });
     exportTypes[type] = obj;
   });
