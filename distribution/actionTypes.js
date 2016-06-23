@@ -11,7 +11,7 @@ var actionTypes = function actionTypes(name) {
   });
 
   var requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX'];
-  var statuses = ['REQUEST', 'CONFIRM', 'FAILURE', 'CACHE_HIT'];
+  var statuses = ['REQUEST', 'CONFIRM', 'FAIL', 'CACHE_HIT'];
 
   requestTypes.forEach(function (type) {
     var obj = {};

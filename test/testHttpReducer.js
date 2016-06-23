@@ -39,7 +39,7 @@ describe('Array', function() {
   })
   describe('GET.FAIL', function() {
     it('should set request state', function() {
-      var state = reducer(undefined, acts.GET.FAILURE(5))
+      var state = reducer(undefined, acts.GET.FAIL(5))
       assert(!state.things[5].GET.requested)
       assert(state.things[5].GET.failed)
       assert(!state.things[5].GET.confirmed)

@@ -15,8 +15,8 @@ export const actionFactory = (stateName, t, api) => {
     REQUEST: (id) => (
       { type: t.DELETE.REQUEST, id }
     ),
-    FAILURE: (id, error) => (
-      { type: t.DELETE.FAILURE, id, error }
+    FAIL: (id, error) => (
+      { type: t.DELETE.FAIL, id, error }
     ),
     CONFIRM: (id) => (
       {
@@ -31,8 +31,8 @@ export const actionFactory = (stateName, t, api) => {
     REQUEST: (id, data) => (
       { type: t.PUT.REQUEST, id, data }
     ),
-    FAILURE: (id, data, error) => (
-      { type: t.PUT.FAILURE, id, data, error }
+    FAIL: (id, data, error) => (
+      { type: t.PUT.FAIL, id, data, error }
     ),
     CONFIRM: (id, data) => (
       {
@@ -48,8 +48,8 @@ export const actionFactory = (stateName, t, api) => {
     REQUEST: (id, data) => (
       { type: t.POST.REQUEST, id, data }
     ),
-    FAILURE: (id, data, error) => (
-      { type: t.POST.FAILURE, id, data, error }
+    FAIL: (id, data, error) => (
+      { type: t.POST.FAIL, id, data, error }
     ),
     CONFIRM: (id, data) => (
       {
@@ -65,8 +65,8 @@ export const actionFactory = (stateName, t, api) => {
     REQUEST: (id) => (
       { type: t.GET.REQUEST, id }
     ),
-    FAILURE: (id, error) => (
-      { type: t.GET.FAILURE, id, error }
+    FAIL: (id, error) => (
+      { type: t.GET.FAIL, id, error }
     ),
     CONFIRM: (id, data) => (
       {
@@ -85,8 +85,8 @@ export const actionFactory = (stateName, t, api) => {
     REQUEST: (params) => (
       { type: t.INDEX.REQUEST, params }
     ),
-    FAILURE: (params, error) => (
-      { type: t.INDEX.FAILURE, params, error }
+    FAIL: (params, error) => (
+      { type: t.INDEX.FAIL, params, error }
     ),
     CONFIRM: (params, data) => (
       {
@@ -104,7 +104,7 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
           .then(json => dispatch(action.INDEX.CONFIRM(id, json.result)))
-          .catch(e => dispatch(action.INDEX.FAILURE(id, e)))
+          .catch(e => dispatch(action.INDEX.FAIL(id, e)))
       }
     ),
     INDEX_BY_PARAMS: (params) => (
@@ -112,7 +112,7 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
           .then(json => dispatch(action.INDEX.CONFIRM(params, json.result)))
-          .catch(e => dispatch(action.INDEX.FAILURE(params, e)))
+          .catch(e => dispatch(action.INDEX.FAIL(params, e)))
       }
     ),
     DELETE: (id) => (
@@ -120,7 +120,7 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.DELETE.REQUEST(id))
         return api.DELETE(id)
           .then(() => dispatch(action.DELETE.CONFIRM(id)))
-          .catch(e => dispatch(action.DELETE.FAILURE(id, e)))
+          .catch(e => dispatch(action.DELETE.FAIL(id, e)))
       }
     ),
     GET: (id) => (
@@ -128,7 +128,7 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.GET.REQUEST(id))
         return api.GET(id)
           .then(json => dispatch(action.GET.CONFIRM(id, json.result)))
-          .catch(e => dispatch(action.GET.FAILURE(id, e)))
+          .catch(e => dispatch(action.GET.FAIL(id, e)))
       }
     ),
     POST: (id, data) => (
@@ -136,7 +136,7 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.POST.REQUEST(id, data))
         return api.POST(data)
           .then(json => dispatch(action.POST.CONFIRM(id, json.result)))
-          .catch(e => dispatch(action.POST.FAILURE(id, data, e)))
+          .catch(e => dispatch(action.POST.FAIL(id, data, e)))
       }
     ),
     PUT: (id, data) => (
@@ -145,7 +145,7 @@ export const actionFactory = (stateName, t, api) => {
         return api.PUT(id, data)
           .then(() => dispatch(action.PUT.CONFIRM(id, data)))
           .catch(e => {
-            dispatch(action.PUT.FAILURE(id, data, e))
+            dispatch(action.PUT.FAIL(id, data, e))
           })
       }
     ),

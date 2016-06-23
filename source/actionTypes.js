@@ -12,7 +12,7 @@ const actionTypes = (name) => {
   })
 
   const requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX']
-  const statuses =  ['REQUEST', 'CONFIRM', 'FAILURE', 'CACHE_HIT']
+  const statuses =  ['REQUEST', 'CONFIRM', 'FAIL', 'CACHE_HIT']
 
   requestTypes.forEach((type) => {
     var obj = {}

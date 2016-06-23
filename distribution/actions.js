@@ -26,8 +26,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     REQUEST: function REQUEST(id) {
       return { type: t.DELETE.REQUEST, id: id };
     },
-    FAILURE: function FAILURE(id, error) {
-      return { type: t.DELETE.FAILURE, id: id, error: error };
+    FAIL: function FAIL(id, error) {
+      return { type: t.DELETE.FAIL, id: id, error: error };
     },
     CONFIRM: function CONFIRM(id) {
       return {
@@ -42,8 +42,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     REQUEST: function REQUEST(id, data) {
       return { type: t.PUT.REQUEST, id: id, data: data };
     },
-    FAILURE: function FAILURE(id, data, error) {
-      return { type: t.PUT.FAILURE, id: id, data: data, error: error };
+    FAIL: function FAIL(id, data, error) {
+      return { type: t.PUT.FAIL, id: id, data: data, error: error };
     },
     CONFIRM: function CONFIRM(id, data) {
       return {
@@ -59,8 +59,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     REQUEST: function REQUEST(id, data) {
       return { type: t.POST.REQUEST, id: id, data: data };
     },
-    FAILURE: function FAILURE(id, data, error) {
-      return { type: t.POST.FAILURE, id: id, data: data, error: error };
+    FAIL: function FAIL(id, data, error) {
+      return { type: t.POST.FAIL, id: id, data: data, error: error };
     },
     CONFIRM: function CONFIRM(id, data) {
       return {
@@ -76,8 +76,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     REQUEST: function REQUEST(id) {
       return { type: t.GET.REQUEST, id: id };
     },
-    FAILURE: function FAILURE(id, error) {
-      return { type: t.GET.FAILURE, id: id, error: error };
+    FAIL: function FAIL(id, error) {
+      return { type: t.GET.FAIL, id: id, error: error };
     },
     CONFIRM: function CONFIRM(id, data) {
       return {
@@ -96,8 +96,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     REQUEST: function REQUEST(params) {
       return { type: t.INDEX.REQUEST, params: params };
     },
-    FAILURE: function FAILURE(params, error) {
-      return { type: t.INDEX.FAILURE, params: params, error: error };
+    FAIL: function FAIL(params, error) {
+      return { type: t.INDEX.FAIL, params: params, error: error };
     },
     CONFIRM: function CONFIRM(params, data) {
       return {
@@ -116,7 +116,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.INDEX(id).then(function (json) {
           return dispatch(action.INDEX.CONFIRM(id, json.result));
         }).catch(function (e) {
-          return dispatch(action.INDEX.FAILURE(id, e));
+          return dispatch(action.INDEX.FAIL(id, e));
         });
       };
     },
@@ -126,7 +126,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.INDEX_BY_PARAMS(params).then(function (json) {
           return dispatch(action.INDEX.CONFIRM(params, json.result));
         }).catch(function (e) {
-          return dispatch(action.INDEX.FAILURE(params, e));
+          return dispatch(action.INDEX.FAIL(params, e));
         });
       };
     },
@@ -136,7 +136,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.DELETE(id).then(function () {
           return dispatch(action.DELETE.CONFIRM(id));
         }).catch(function (e) {
-          return dispatch(action.DELETE.FAILURE(id, e));
+          return dispatch(action.DELETE.FAIL(id, e));
         });
       };
     },
@@ -146,7 +146,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.GET(id).then(function (json) {
           return dispatch(action.GET.CONFIRM(id, json.result));
         }).catch(function (e) {
-          return dispatch(action.GET.FAILURE(id, e));
+          return dispatch(action.GET.FAIL(id, e));
         });
       };
     },
@@ -156,7 +156,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.POST(data).then(function (json) {
           return dispatch(action.POST.CONFIRM(id, json.result));
         }).catch(function (e) {
-          return dispatch(action.POST.FAILURE(id, data, e));
+          return dispatch(action.POST.FAIL(id, data, e));
         });
       };
     },
@@ -166,7 +166,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.PUT(id, data).then(function () {
           return dispatch(action.PUT.CONFIRM(id, data));
         }).catch(function (e) {
-          dispatch(action.PUT.FAILURE(id, data, e));
+          dispatch(action.PUT.FAIL(id, data, e));
         });
       };
     }

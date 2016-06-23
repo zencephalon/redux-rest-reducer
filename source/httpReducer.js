@@ -120,7 +120,7 @@ export function reducerFactory(t) {
         return Object.assign({}, state, {
           things, collections
         })
-      case t.GET.FAILURE:
+      case t.GET.FAIL:
         things = Object.assign({}, state.things)
         if (things[action.id] === undefined) {
           things[action.id] = thingDefault()
@@ -164,7 +164,7 @@ export function reducerFactory(t) {
           confirmed: true
         }
         return Object.assign({}, state, { collections, things })
-      case t.INDEX.FAILURE:
+      case t.INDEX.FAIL:
         collections = Object.assign({}, state.collections)
         collections[action.params] = {
           data: [],
@@ -184,7 +184,7 @@ export function reducerFactory(t) {
         return Object.assign({}, state, {
           things
         })
-      case t.DELETE.FAILURE:
+      case t.DELETE.FAIL:
         things = Object.assign({}, state.things)
         things[action.id] = {
           ...things[action.id],
@@ -224,7 +224,7 @@ export function reducerFactory(t) {
         const dataWithId = Object.assign({}, POST[action.id].data, { id: action.data })
         POST[action.id] = { requested: false, failed: false, confirmed: true, data: dataWithId }
         return Object.assign({}, state, { POST })
-      case t.POST.FAILURE:
+      case t.POST.FAIL:
         POST = Object.assign({}, state.POST)
         POST[action.id] = { requested: false, failed: true, confirmed: false, data: action.data }
         return Object.assign({}, state, { POST })
@@ -262,7 +262,7 @@ export function reducerFactory(t) {
         return Object.assign({}, state, {
           things, collections
         })
-      case t.PUT.FAILURE:
+      case t.PUT.FAIL:
         things = Object.assign({}, state.things)
         things[action.id] = {
           ...things[action.id],
