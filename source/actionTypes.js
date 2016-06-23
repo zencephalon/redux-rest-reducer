@@ -8,7 +8,7 @@ const actionTypes = (name) => {
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {
-    exportTypes[key] = `${name}/${key}`
+    exportTypes[key] = `NEO/${name}/${key}`
   })
 
   const requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX']
@@ -17,7 +17,7 @@ const actionTypes = (name) => {
   requestTypes.forEach((type) => {
     var obj = {}
     statuses.forEach((status) => {
-      obj[status] = `${name}/${type}/${status}`
+      obj[status] = `NEO/${name}/${type}/${status}`
     })
     exportTypes[type] = obj
   })
