@@ -1,4 +1,4 @@
-import { postImage } from '~/lib/api'
+import { postImage } from './api'
 
 export const neoGenericActionFactory = (stateName, t, api) => {
   const action = {}
