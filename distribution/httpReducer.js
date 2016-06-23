@@ -146,8 +146,7 @@ function reducerFactory(t) {
         things[action.id] = _extends({}, things[action.id], {
           GET: {
             requested: false, failed: true, confirmed: false
-          },
-          data: action.data
+          }
         });
         return Object.assign({}, state, {
           things: things

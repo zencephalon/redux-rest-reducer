@@ -36,6 +36,13 @@ describe('Array', function() {
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       assert(state.things[5].data.ILUVU)
     })
+    it('should overwrite existing data', function() {
+      var state = reducer(undefined, acts.GET.REQUEST(5))
+      state = reducer(state, acts.GET.CONFIRM(5, testObj))
+      state = reducer(state, acts.GET.REQUEST(5))
+      state = reducer(state, acts.GET.CONFIRM(5, { ILUVU: false }))
+      assert(!state.things[5].data.ILUVU)
+    })
   })
   describe('GET.FAIL', function() {
     it('should set request state', function() {
@@ -43,6 +50,12 @@ describe('Array', function() {
       assert(!state.things[5].GET.requested)
       assert(state.things[5].GET.failed)
       assert(!state.things[5].GET.confirmed)
+    })
+    it('should preserve existing data', function() {
+      var state = reducer(undefined, acts.GET.REQUEST(5))
+      state = reducer(state, acts.GET.CONFIRM(5, testObj))
+      state = reducer(state, acts.GET.FAIL(5))
+      assert(state.things[5].data.ILUVU)
     })
   })
 })

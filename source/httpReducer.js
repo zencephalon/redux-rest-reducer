@@ -130,7 +130,6 @@ export function reducerFactory(t) {
           GET: {
             requested: false, failed: true, confirmed: false
           },
-          data: action.data
         }
         return Object.assign({}, state, {
           things
