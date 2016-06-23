@@ -20,7 +20,7 @@ export const defaultIndexState = {
   data: []
 }
 
-export const httpReducerDefaultState = {
+export const reducerDefaultState = {
   things: {
     /*
     "uuid": {
@@ -76,7 +76,7 @@ const thingDefault = () => {
   }
 }
 
-export function httpReducerFactory(t) {
+export function reducerFactory(t) {
   const reducer = function (state = httpReducerDefaultState, action) {
     let things
     let collections

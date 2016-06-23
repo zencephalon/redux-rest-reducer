@@ -3,11 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.httpReducerDefaultState = exports.defaultIndexState = exports.defaultIndexRequestedState = exports.defaultPOSTState = undefined;
+exports.reducerDefaultState = exports.defaultIndexState = exports.defaultIndexRequestedState = exports.defaultPOSTState = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.httpReducerFactory = httpReducerFactory;
+exports.reducerFactory = reducerFactory;
 
 var _lodash = require('lodash');
 
@@ -35,7 +35,7 @@ var defaultIndexState = exports.defaultIndexState = {
   data: []
 };
 
-var httpReducerDefaultState = exports.httpReducerDefaultState = {
+var reducerDefaultState = exports.reducerDefaultState = {
   things: {
     /*
     "uuid": {
@@ -91,7 +91,7 @@ var thingDefault = function thingDefault() {
   };
 };
 
-function httpReducerFactory(t) {
+function reducerFactory(t) {
   var reducer = function reducer() {
     var state = arguments.length <= 0 || arguments[0] === undefined ? httpReducerDefaultState : arguments[0];
     var action = arguments[1];
