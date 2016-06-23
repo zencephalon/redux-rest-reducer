@@ -5,7 +5,7 @@ import * as actionTypes from './actionTypes'
 
 module.exports = {
   api,
-  httpReducer,
+  http: httpReducer,
   actions,
   actionTypes: actionTypes.default,
 }

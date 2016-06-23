@@ -20,7 +20,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 module.exports = {
   api: api,
-  httpReducer: httpReducer,
+  http: httpReducer,
   actions: actions,
   actionTypes: actionTypes.default
 };
