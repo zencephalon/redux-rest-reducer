@@ -77,7 +77,7 @@ const thingDefault = () => {
 }
 
 export function reducerFactory(t) {
-  const reducer = function (state = httpReducerDefaultState, action) {
+  const reducer = function (state = reducerDefaultState, action) {
     let things
     let collections
     let POST

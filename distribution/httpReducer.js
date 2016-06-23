@@ -93,7 +93,7 @@ var thingDefault = function thingDefault() {
 
 function reducerFactory(t) {
   var reducer = function reducer() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? httpReducerDefaultState : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? reducerDefaultState : arguments[0];
     var action = arguments[1];
 
     var things = void 0;
