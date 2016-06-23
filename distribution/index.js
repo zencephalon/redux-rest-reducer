@@ -8,19 +8,19 @@ var _httpReducer = require('./httpReducer');
 
 var httpReducer = _interopRequireWildcard(_httpReducer);
 
-var _neoActions = require('./neoActions');
+var _actions = require('./actions');
 
-var neoActions = _interopRequireWildcard(_neoActions);
+var actions = _interopRequireWildcard(_actions);
 
-var _neoActionTypes = require('./neoActionTypes');
+var _actionTypes = require('./actionTypes');
 
-var neoActionTypes = _interopRequireWildcard(_neoActionTypes);
+var actionTypes = _interopRequireWildcard(_actionTypes);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 module.exports = {
   api: api,
   httpReducer: httpReducer,
-  neoActions: neoActions,
-  neoActionTypes: neoActionTypes
+  actions: actions,
+  actionTypes: actionTypes
 };

@@ -1,4 +1,4 @@
-export const neoActionTypes = (name) => {
+const actionTypes = (name) => {
   const actionTypes = [
     'INVALIDATE',
     'SELECT',
@@ -23,3 +23,5 @@ export const neoActionTypes = (name) => {
   })
   return exportTypes
 }
+
+export default actionTypes

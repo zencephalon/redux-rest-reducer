@@ -1,6 +1,6 @@
 import { postImage } from './api'
 
-export const neoGenericActionFactory = (stateName, t, api) => {
+export const actionFactory = (stateName, t, api) => {
   const action = {}
 
   const simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT']
@@ -188,7 +188,7 @@ export const neoGenericActionFactory = (stateName, t, api) => {
   }
 }
 
-export const neoWithImageActionFactory = (generic, imageParam) => {
+export const withImageActionFactory = (generic, imageParam) => {
   const promise = {
     POST_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (

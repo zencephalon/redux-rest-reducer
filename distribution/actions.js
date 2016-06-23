@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.neoWithImageActionFactory = exports.neoGenericActionFactory = undefined;
+exports.withImageActionFactory = exports.actionFactory = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -11,7 +11,7 @@ var _api = require('./api');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var neoGenericActionFactory = exports.neoGenericActionFactory = function neoGenericActionFactory(stateName, t, api) {
+var actionFactory = exports.actionFactory = function actionFactory(stateName, t, api) {
   var action = {};
 
   var simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT'];
@@ -229,7 +229,7 @@ var neoGenericActionFactory = exports.neoGenericActionFactory = function neoGene
   };
 };
 
-var neoWithImageActionFactory = exports.neoWithImageActionFactory = function neoWithImageActionFactory(generic, imageParam) {
+var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
