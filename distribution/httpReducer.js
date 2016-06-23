@@ -109,11 +109,16 @@ function reducerFactory(t) {
         });
       case t.GET.REQUEST:
         things = Object.assign({}, state.things);
-        things[action.id] = thingDefault();
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault();
+        }
         things[action.id].GET.requested = true;
         return Object.assign({}, state, { things: things });
       case t.GET.CONFIRM:
         things = Object.assign({}, state.things);
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault();
+        }
         things[action.id] = _extends({}, things[action.id], {
           GET: {
             requested: false, failed: false, confirmed: true
@@ -133,8 +138,11 @@ function reducerFactory(t) {
         return Object.assign({}, state, {
           things: things, collections: collections
         });
-      case t.GET.FAIL:
+      case t.GET.FAILURE:
         things = Object.assign({}, state.things);
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault();
+        }
         things[action.id] = _extends({}, things[action.id], {
           GET: {
             requested: false, failed: true, confirmed: false
@@ -195,7 +203,7 @@ function reducerFactory(t) {
           confirmed: true
         };
         return Object.assign({}, state, { collections: collections, things: things });
-      case t.INDEX.FAIL:
+      case t.INDEX.FAILURE:
         collections = Object.assign({}, state.collections);
         collections[action.params] = {
           data: [],
@@ -214,7 +222,7 @@ function reducerFactory(t) {
         return Object.assign({}, state, {
           things: things
         });
-      case t.DELETE.FAIL:
+      case t.DELETE.FAILURE:
         things = Object.assign({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
           DELETE: {

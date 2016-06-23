@@ -90,11 +90,16 @@ export function reducerFactory(t) {
         })
       case t.GET.REQUEST:
         things = Object.assign({}, state.things)
-        things[action.id] = thingDefault()
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault()
+        }
         things[action.id].GET.requested = true
         return Object.assign({}, state, { things })
       case t.GET.CONFIRM:
         things = Object.assign({}, state.things)
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault()
+        }
         things[action.id] = {
           ...things[action.id],
           GET: {
@@ -115,8 +120,11 @@ export function reducerFactory(t) {
         return Object.assign({}, state, {
           things, collections
         })
-      case t.GET.FAIL:
+      case t.GET.FAILURE:
         things = Object.assign({}, state.things)
+        if (things[action.id] === undefined) {
+          things[action.id] = thingDefault()
+        }
         things[action.id] = {
           ...things[action.id],
           GET: {
@@ -156,7 +164,7 @@ export function reducerFactory(t) {
           confirmed: true
         }
         return Object.assign({}, state, { collections, things })
-      case t.INDEX.FAIL:
+      case t.INDEX.FAILURE:
         collections = Object.assign({}, state.collections)
         collections[action.params] = {
           data: [],
@@ -176,7 +184,7 @@ export function reducerFactory(t) {
         return Object.assign({}, state, {
           things
         })
-      case t.DELETE.FAIL:
+      case t.DELETE.FAILURE:
         things = Object.assign({}, state.things)
         things[action.id] = {
           ...things[action.id],
