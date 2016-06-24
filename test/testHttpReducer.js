@@ -1,67 +1,70 @@
-var assert = require('chai').assert;
-var http = require('../distribution/httpReducer');
-var actionTypes = require('../distribution/actionTypes');
-var actions = require('../distribution/actions');
+const assert = require('chai').assert;
+const http = require('../distribution/httpReducer');
+const actionTypes = require('../distribution/actionTypes');
+const actions = require('../distribution/actions');
 
-var types = actionTypes.default('TEST')
-var acts = actions.actionFactory('TEST', types, {}).action
-var reducer = http.reducerFactory(types)
+const types = actionTypes.default('TEST')
+const acts = actions.actionFactory('TEST', types, {}).action
+const reducer = http.reducerFactory(types)
 
-var testObj = { id: 5, ILUVU: true, name: 'Aleister Crowley' }
+const testObj = { id: 5, ILUVU: true, name: 'Aleister Crowley' }
 
-describe('Array', function() {
-  describe('GET.REQUEST', function() {
-    it('should set request state', function() {
-      var state = reducer(undefined, acts.GET.REQUEST(5))
+describe('Array', () => {
+  describe('GET.REQUEST', () => {
+    it('should set request state', () => {
+      const state = reducer(undefined, acts.GET.REQUEST(5))
       assert(state.things[5].GET.requested)
       assert(!state.things[5].GET.failed)
       assert(!state.things[5].GET.confirmed)
     })
-    it('should preserve existing data', function() {
-      var state = reducer(undefined, acts.GET.REQUEST(5))
+    it('should preserve existing data', () => {
+      let state = reducer(undefined, acts.GET.REQUEST(5))
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       state = reducer(state, acts.GET.REQUEST(5))
       assert(state.things[5].data.ILUVU)
     })
   })
-  describe('GET.CONFIRM', function() {
-    it('should set request state', function() {
-      var state = reducer(undefined, acts.GET.CONFIRM(5))
+  describe('GET.CONFIRM', () => {
+    it('should set request state', () => {
+      const state = reducer(undefined, acts.GET.CONFIRM(5))
       assert(!state.things[5].GET.requested)
       assert(!state.things[5].GET.failed)
       assert(state.things[5].GET.confirmed)
     })
-    it('should set data', function() {
-      var state = reducer(undefined, acts.GET.REQUEST(5))
+    it('should set data', () => {
+      let state = reducer(undefined, acts.GET.REQUEST(5))
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       assert(state.things[5].data.ILUVU)
     })
-    it('should overwrite existing data', function() {
-      var state = reducer(undefined, acts.GET.REQUEST(5))
+    it('should overwrite existing data', () => {
+      let state = reducer(undefined, acts.GET.REQUEST(5))
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       state = reducer(state, acts.GET.REQUEST(5))
       state = reducer(state, acts.GET.CONFIRM(5, { ILUVU: false }))
       assert(!state.things[5].data.ILUVU)
     })
   })
-  describe('GET.FAIL', function() {
-    it('should set request state', function() {
-      var state = reducer(undefined, acts.GET.FAIL(5))
+  describe('GET.FAIL', () => {
+    it('should set request state', () => {
+      const state = reducer(undefined, acts.GET.FAIL(5))
       assert(!state.things[5].GET.requested)
       assert(state.things[5].GET.failed)
       assert(!state.things[5].GET.confirmed)
     })
-    it('should preserve existing data', function() {
-      var state = reducer(undefined, acts.GET.REQUEST(5))
+    it('should preserve existing data', () => {
+      let state = reducer(undefined, acts.GET.REQUEST(5))
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       state = reducer(state, acts.GET.FAIL(5))
       assert(state.things[5].data.ILUVU)
     })
   })
-  describe('PUT.REQUEST', function() {
-    it('should not break GET.REQUEST', function() {
-      var state = reducer(undefined, acts.PUT.REQUEST(5))
+  describe('PUT.REQUEST', () => {
+    it('should not break GET.REQUEST', () => {
+      let state = reducer(undefined, acts.PUT.REQUEST(5))
       state = reducer(state, acts.GET.REQUEST(5))
     })
+  })
+  describe('INDEX.CONFIRM', () => {
+
   })
 })

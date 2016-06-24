@@ -1,23 +1,23 @@
-import _ from "lodash"
+import _ from 'lodash'
 
 export const defaultPOSTState = {
   requested: false,
   confirmed: false,
-  failed: false
+  failed: false,
 }
 
 export const defaultIndexRequestedState = {
   requested: true,
   confirmed: false,
   failed: false,
-  data: []
+  data: [],
 }
 
 export const defaultIndexState = {
   requested: false,
   confirmed: false,
   failed: false,
-  data: []
+  data: [],
 }
 
 export const reducerDefaultState = {
@@ -58,26 +58,28 @@ export const reducerDefaultState = {
     /*
     "id": { requested: true, failed: false, confirmed: false, data: {} }
     */
-  }
+  },
 }
 
-const methodDefault = () => {
-  return {
-    requested: false, failed: false, confirmed: false
+const methodDefault = () => (
+  {
+    requested: false,
+    failed: false,
+    confirmed: false,
   }
-}
+)
 
-const thingDefault = () => {
-  return {
+const thingDefault = () => (
+  {
     data: {},
     GET: methodDefault(),
     DELETE: methodDefault(),
-    PUT: methodDefault()
+    PUT: methodDefault(),
   }
-}
+)
 
 export function reducerFactory(t) {
-  const reducer = function (state = reducerDefaultState, action) {
+  const reducer = function httpReducer(state = reducerDefaultState, action) {
     let things
     let collections
     let POST
@@ -85,8 +87,7 @@ export function reducerFactory(t) {
     switch (action.type) {
       case t.INVALIDATE:
         return Object.assign({}, state, {
-          things: _.reject(state.things, thing =>
-            { return thing.id === action.id})
+          things: _.reject(state.things, thing => thing.id === action.id),
         })
       case t.GET.REQUEST:
         things = Object.assign({}, state.things)
@@ -102,22 +103,19 @@ export function reducerFactory(t) {
         things[action.id] = {
           ...things[action.id],
           GET: {
-            requested: false, failed: false, confirmed: true
+            requested: false, failed: false, confirmed: true,
           },
           data: action.data }
 
-        collections = {}
-        for (const collectionKey in state.collections) {
-          let collection = state.collections[collectionKey]
-          collections[collectionKey] = Object.assign({}, collection, {
-            data: collection.data.map(thing => {
-              return thing.id == action.id ? action.data : thing
+        collections = _.mapValues(state.collections, collection => (
+            Object.assign({}, collection, {
+              data: collection.data.map(thing =>
+                (thing.id === action.id ? action.data : thing)),
             })
-          })
-        }
+          ))
 
         return Object.assign({}, state, {
-          things, collections
+          things, collections,
         })
       case t.GET.FAIL:
         things = Object.assign({}, state.things)
