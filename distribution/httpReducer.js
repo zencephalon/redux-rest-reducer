@@ -78,7 +78,9 @@ var reducerDefaultState = exports.reducerDefaultState = {
 
 var methodDefault = function methodDefault() {
   return {
-    requested: false, failed: false, confirmed: false
+    requested: false,
+    failed: false,
+    confirmed: false
   };
 };
 
@@ -92,7 +94,7 @@ var thingDefault = function thingDefault() {
 };
 
 function reducerFactory(t) {
-  var reducer = function reducer() {
+  var reducer = function httpReducer() {
     var state = arguments.length <= 0 || arguments[0] === undefined ? reducerDefaultState : arguments[0];
     var action = arguments[1];
 
@@ -109,43 +111,41 @@ function reducerFactory(t) {
         });
       case t.GET.REQUEST:
         things = Object.assign({}, state.things);
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault();
-        }
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id].GET.requested = true;
+
         return Object.assign({}, state, { things: things });
       case t.GET.CONFIRM:
         things = Object.assign({}, state.things);
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault();
-        }
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id] = _extends({}, things[action.id], {
           GET: {
             requested: false, failed: false, confirmed: true
           },
           data: action.data });
 
-        collections = {};
-        for (var collectionKey in state.collections) {
-          var collection = state.collections[collectionKey];
-          collections[collectionKey] = Object.assign({}, collection, {
+        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+          return Object.assign({}, collection, {
             data: collection.data.map(function (thing) {
-              return thing.id == action.id ? action.data : thing;
+              return thing.id === action.id ? action.data : thing;
             })
           });
-        }
+        });
 
         return Object.assign({}, state, {
           things: things, collections: collections
         });
       case t.GET.FAIL:
         things = Object.assign({}, state.things);
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault();
-        }
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id] = _extends({}, things[action.id], {
           GET: {
-            requested: false, failed: true, confirmed: false
+            requested: false,
+            failed: true,
+            confirmed: false
           }
         });
         return Object.assign({}, state, {
@@ -163,6 +163,7 @@ function reducerFactory(t) {
       case t.INDEX.CONFIRM:
         collections = Object.assign({}, state.collections);
         things = Object.assign({}, state.things);
+
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -175,6 +176,8 @@ function reducerFactory(t) {
               things[datum.id] = thingDefault();
             }
             things[datum.id].data = datum;
+
+            // should we do this? maybe not...
             if (!things[datum.id].GET) {
               things[datum.id].GET = methodDefault();
             }
@@ -215,7 +218,9 @@ function reducerFactory(t) {
         things = Object.assign({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
           DELETE: {
-            requested: true, failed: false, confirmed: false
+            requested: true,
+            failed: false,
+            confirmed: false
           }
         });
         return Object.assign({}, state, {
@@ -225,7 +230,9 @@ function reducerFactory(t) {
         things = Object.assign({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
           DELETE: {
-            requested: false, failed: false, confirmed: true
+            requested: false,
+            failed: false,
+            confirmed: true
           }
         });
         return Object.assign({}, state, {
@@ -235,19 +242,19 @@ function reducerFactory(t) {
         things = Object.assign({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
           DELETE: {
-            requested: false, failed: false, confirmed: true
+            requested: false,
+            failed: false,
+            confirmed: true
           }
         });
 
-        collections = {};
-        for (var _collectionKey in state.collections) {
-          var _collection = state.collections[_collectionKey];
-          collections[_collectionKey] = Object.assign({}, _collection, {
-            data: _collection.data.filter(function (thing) {
-              return thing.id != action.id;
+        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+          return Object.assign({}, collection, {
+            data: collection.data.filter(function (thing) {
+              return thing.id !== action.id;
             })
           });
-        }
+        });
 
         return Object.assign({}, state, {
           things: things, collections: collections
@@ -258,18 +265,34 @@ function reducerFactory(t) {
         return Object.assign({}, state, { POST: POST });
       case t.POST.CONFIRM:
         POST = Object.assign({}, state.POST);
-        var dataWithId = Object.assign({}, POST[action.id].data, { id: action.data });
-        POST[action.id] = { requested: false, failed: false, confirmed: true, data: dataWithId };
+        POST[action.id] = {
+          requested: false,
+          failed: false,
+          confirmed: true,
+          data: Object.assign({}, POST[action.id].data, {
+            id: action.data
+          })
+        };
         return Object.assign({}, state, { POST: POST });
       case t.POST.FAIL:
         POST = Object.assign({}, state.POST);
-        POST[action.id] = { requested: false, failed: true, confirmed: false, data: action.data };
+
+        POST[action.id] = {
+          requested: false,
+          failed: true,
+          confirmed: false,
+          data: action.data
+        };
         return Object.assign({}, state, { POST: POST });
       case t.PUT.REQUEST:
         things = Object.assign({}, state.things);
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id] = _extends({}, things[action.id], {
           PUT: {
-            requested: true, failed: false, confirmed: false
+            requested: true,
+            failed: false,
+            confirmed: false
           }
         });
         return Object.assign({}, state, {
@@ -277,31 +300,37 @@ function reducerFactory(t) {
         });
       case t.PUT.CONFIRM:
         things = Object.assign({}, state.things);
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id] = _extends({}, things[action.id], {
           data: action.data,
           PUT: {
-            requested: false, failed: false, confirmed: true
+            requested: false,
+            failed: false,
+            confirmed: true
           }
         });
 
-        collections = {};
-        for (var _collectionKey2 in state.collections) {
-          var _collection2 = state.collections[_collectionKey2];
-          collections[_collectionKey2] = Object.assign({}, _collection2, {
-            data: _collection2.data.map(function (thing) {
-              return thing.id == action.id ? action.data : thing;
+        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+          return Object.assign({}, collection, {
+            data: collection.data.map(function (thing) {
+              return thing.id === action.id ? action.data : thing;
             })
           });
-        }
+        });
 
         return Object.assign({}, state, {
           things: things, collections: collections
         });
       case t.PUT.FAIL:
         things = Object.assign({}, state.things);
+
+        things[action.id] = things[action.id] || thingDefault();
         things[action.id] = _extends({}, things[action.id], {
           PUT: {
-            requested: false, failed: true, confirmed: false
+            requested: false,
+            failed: true,
+            confirmed: false
           }
         });
         return Object.assign({}, state, {
