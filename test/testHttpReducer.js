@@ -3,11 +3,11 @@ var http = require('../distribution/httpReducer');
 var actionTypes = require('../distribution/actionTypes');
 var actions = require('../distribution/actions');
 
-var types = actionTypes.default("TEST")
-var acts = actions.actionFactory("TEST", types, {}).action
+var types = actionTypes.default('TEST')
+var acts = actions.actionFactory('TEST', types, {}).action
 var reducer = http.reducerFactory(types)
 
-var testObj = { id: 5, ILUVU: true }
+var testObj = { id: 5, ILUVU: true, name: 'Aleister Crowley' }
 
 describe('Array', function() {
   describe('GET.REQUEST', function() {
@@ -56,6 +56,12 @@ describe('Array', function() {
       state = reducer(state, acts.GET.CONFIRM(5, testObj))
       state = reducer(state, acts.GET.FAIL(5))
       assert(state.things[5].data.ILUVU)
+    })
+  })
+  describe('PUT.REQUEST', function() {
+    it('should not break GET.REQUEST', function() {
+      var state = reducer(undefined, acts.PUT.REQUEST(5))
+      state = reducer(state, acts.GET.REQUEST(5))
     })
   })
 })

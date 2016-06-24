@@ -90,16 +90,15 @@ export function reducerFactory(t) {
         })
       case t.GET.REQUEST:
         things = Object.assign({}, state.things)
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault()
-        }
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id].GET.requested = true
+
         return Object.assign({}, state, { things })
       case t.GET.CONFIRM:
         things = Object.assign({}, state.things)
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault()
-        }
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           GET: {
@@ -122,9 +121,8 @@ export function reducerFactory(t) {
         })
       case t.GET.FAIL:
         things = Object.assign({}, state.things)
-        if (things[action.id] === undefined) {
-          things[action.id] = thingDefault()
-        }
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           GET: {
@@ -225,10 +223,18 @@ export function reducerFactory(t) {
         return Object.assign({}, state, { POST })
       case t.POST.FAIL:
         POST = Object.assign({}, state.POST)
-        POST[action.id] = { requested: false, failed: true, confirmed: false, data: action.data }
+
+        POST[action.id] = {
+          requested: false,
+          failed: true,
+          confirmed: false,
+          data: action.data,
+        }
         return Object.assign({}, state, { POST })
       case t.PUT.REQUEST:
         things = Object.assign({}, state.things)
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           PUT: {
@@ -240,6 +246,8 @@ export function reducerFactory(t) {
         })
       case t.PUT.CONFIRM:
         things = Object.assign({}, state.things)
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           data: action.data,
@@ -263,6 +271,8 @@ export function reducerFactory(t) {
         })
       case t.PUT.FAIL:
         things = Object.assign({}, state.things)
+
+        things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           PUT: {
