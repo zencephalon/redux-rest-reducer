@@ -30,7 +30,7 @@ function fetchFromAPI(endpoint) {
   if (!image) {
     headers['Content-Type'] = CONTENT_TYPE;
   }
-  if (authToken && authToken != "null") {
+  if (authToken && authToken !== 'null') {
     headers['X-AUTH-TOKEN'] = authToken;
   }
   return fetch(API_URL + endpoint, Object.assign({
@@ -39,11 +39,7 @@ function fetchFromAPI(endpoint) {
     if (!r.ok) {
       throw Error(r.statusText);
     }
-    if (json) {
-      return r.json();
-    } else {
-      return null;
-    }
+    return json ? r.json() : null;
   });
 }
 
@@ -57,7 +53,8 @@ function postMultipartToAPI(endpoint) {
   var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   var image = arguments[2];
 
-  return fetchFromAPI(endpoint, { options: Object.assign({ method: 'post' }, options),
+  return fetchFromAPI(endpoint, {
+    options: Object.assign({ method: 'post' }, options),
     image: image
   }).then(function (r) {
     return r;
@@ -67,7 +64,8 @@ function postMultipartToAPI(endpoint) {
 function putToAPI(endpoint) {
   var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  return fetchFromAPI(endpoint, { options: Object.assign({ method: 'put' }, options),
+  return fetchFromAPI(endpoint, {
+    options: Object.assign({ method: 'put' }, options),
     json: false
   });
 }
@@ -75,7 +73,8 @@ function putToAPI(endpoint) {
 function deleteFromAPI(endpoint) {
   var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-  return fetchFromAPI(endpoint, { options: Object.assign({ method: 'delete' }, options),
+  return fetchFromAPI(endpoint, {
+    options: Object.assign({ method: 'delete' }, options),
     json: false
   });
 }
@@ -91,29 +90,29 @@ function postImage(imageFormData) {
 
 function genericApiFactory(endpoint, indexParam, template) {
   return {
-    'INDEX': function INDEX(id) {
+    INDEX: function INDEX(id) {
       var req = indexParam ? endpoint + '/?' + indexParam + '=' + id : endpoint + '/';
       return fetchFromAPI(req);
     },
-    'INDEX_BY_PARAMS': function INDEX_BY_PARAMS(params) {
+    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
       return fetchFromAPI(endpoint + '/?' + params);
     },
-    'POST': function POST(item) {
-      item = Object.assign({}, template, item);
+    POST: function POST(item) {
+      var newItem = Object.assign({}, template, item);
       return postToAPI(endpoint + '/', {
-        body: JSON.stringify(item)
+        body: JSON.stringify(newItem)
       });
     },
-    'GET': function GET(id) {
+    GET: function GET(id) {
       return fetchFromAPI(endpoint + '/' + id);
     },
-    'DELETE': function DELETE(id) {
+    DELETE: function DELETE(id) {
       return deleteFromAPI(endpoint + '/' + id);
     },
-    'PUT': function PUT(id, item) {
-      item = Object.assign({}, template, item);
+    PUT: function PUT(id, item) {
+      var newItem = Object.assign({}, template, item);
       return putToAPI(endpoint + '/' + id, {
-        body: JSON.stringify(item)
+        body: JSON.stringify(newItem)
       });
     }
   };
