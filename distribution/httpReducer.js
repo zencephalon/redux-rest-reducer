@@ -11,10 +11,6 @@ exports.reducerFactory = reducerFactory;
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var defaultPOSTState = exports.defaultPOSTState = {
   requested: false,
   confirmed: false,
@@ -105,7 +101,7 @@ function reducerFactory(t) {
     switch (action.type) {
       case t.INVALIDATE:
         return Object.assign({}, state, {
-          things: _lodash2.default.reject(state.things, function (thing) {
+          things: (0, _lodash.reject)(state.things, function (thing) {
             return thing.id === action.id;
           })
         });
@@ -126,7 +122,7 @@ function reducerFactory(t) {
           },
           data: action.data });
 
-        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return Object.assign({}, collection, {
             data: collection.data.map(function (thing) {
               return thing.id === action.id ? action.data : thing;
@@ -199,7 +195,7 @@ function reducerFactory(t) {
         }
 
         collections[action.params] = {
-          data: _lodash2.default.sortBy(action.data, ['firstName', 'name', 'id']),
+          data: action.data,
           requested: false,
           failed: false,
           confirmed: true
@@ -248,7 +244,7 @@ function reducerFactory(t) {
           }
         });
 
-        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return Object.assign({}, collection, {
             data: collection.data.filter(function (thing) {
               return thing.id !== action.id;
@@ -311,7 +307,7 @@ function reducerFactory(t) {
           }
         });
 
-        collections = _lodash2.default.mapValues(state.collections, function (collection) {
+        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return Object.assign({}, collection, {
             data: collection.data.map(function (thing) {
               return thing.id === action.id ? action.data : thing;

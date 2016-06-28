@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { reject, mapValues } from 'lodash'
 
 export const defaultPOSTState = {
   requested: false,
@@ -87,7 +87,7 @@ export function reducerFactory(t) {
     switch (action.type) {
       case t.INVALIDATE:
         return Object.assign({}, state, {
-          things: _.reject(state.things, thing => thing.id === action.id),
+          things: reject(state.things, thing => thing.id === action.id),
         })
       case t.GET.REQUEST:
         things = Object.assign({}, state.things)
@@ -107,7 +107,7 @@ export function reducerFactory(t) {
           },
           data: action.data }
 
-        collections = _.mapValues(state.collections, collection => (
+        collections = mapValues(state.collections, collection => (
             Object.assign({}, collection, {
               data: collection.data.map(thing =>
                 (thing.id === action.id ? action.data : thing)),
@@ -158,7 +158,7 @@ export function reducerFactory(t) {
           things[datum.id].GET.confirmed = true
         }
         collections[action.params] = {
-          data: _.sortBy(action.data, ['firstName', 'name', 'id']),
+          data: action.data,
           requested: false,
           failed: false,
           confirmed: true,
@@ -210,7 +210,7 @@ export function reducerFactory(t) {
           },
         }
 
-        collections = _.mapValues(state.collections, collection =>
+        collections = mapValues(state.collections, collection =>
           Object.assign({}, collection, {
             data: collection.data.filter(thing =>
               thing.id !== action.id),
@@ -274,7 +274,7 @@ export function reducerFactory(t) {
           },
         }
 
-        collections = _.mapValues(state.collections, collection => (
+        collections = mapValues(state.collections, collection => (
           Object.assign({}, collection, {
             data: collection.data.map(thing => (
               thing.id === action.id ? action.data : thing

@@ -9,6 +9,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _api = require('./api');
 
+var _lodash = require('lodash');
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var actionFactory = exports.actionFactory = function actionFactory(stateName, t, api) {
@@ -100,9 +102,10 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return { type: t.INDEX.FAIL, params: params, error: error };
     },
     CONFIRM: function CONFIRM(params, data) {
+      var sortOrder = arguments.length <= 2 || arguments[2] === undefined ? ['orderInList', 'firstName', 'name', 'id'] : arguments[2];
       return {
         params: params,
-        data: data,
+        data: sortOrder ? (0, _lodash.sortBy)(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now()
       };
@@ -110,21 +113,21 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 
   var promise = {
-    INDEX: function INDEX(id) {
+    INDEX: function INDEX(id, sortOrder) {
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(id));
         return api.INDEX(id).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(id, json.result));
+          return dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder));
         }).catch(function (e) {
           return dispatch(action.INDEX.FAIL(id, e));
         });
       };
     },
-    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
+    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params, sortOrder) {
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(params));
         return api.INDEX_BY_PARAMS(params).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(params, json.result));
+          return dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder));
         }).catch(function (e) {
           return dispatch(action.INDEX.FAIL(params, e));
         });

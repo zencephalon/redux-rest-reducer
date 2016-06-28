@@ -1,4 +1,5 @@
 import { postImage } from './api'
+import { sortBy } from 'lodash'
 
 export const actionFactory = (stateName, t, api) => {
   const action = {}
@@ -88,10 +89,10 @@ export const actionFactory = (stateName, t, api) => {
     FAIL: (params, error) => (
       { type: t.INDEX.FAIL, params, error }
     ),
-    CONFIRM: (params, data) => (
+    CONFIRM: (params, data, sortOrder = ['orderInList', 'firstName', 'name', 'id']) => (
       {
         params,
-        data,
+        data: sortOrder ? sortBy(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now(),
       }
@@ -99,19 +100,19 @@ export const actionFactory = (stateName, t, api) => {
   }
 
   const promise = {
-    INDEX: (id) => (
+    INDEX: (id, sortOrder) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
-          .then(json => dispatch(action.INDEX.CONFIRM(id, json.result)))
+          .then(json => dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder)))
           .catch(e => dispatch(action.INDEX.FAIL(id, e)))
       }
     ),
-    INDEX_BY_PARAMS: (params) => (
+    INDEX_BY_PARAMS: (params, sortOrder) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
-          .then(json => dispatch(action.INDEX.CONFIRM(params, json.result)))
+          .then(json => dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder)))
           .catch(e => dispatch(action.INDEX.FAIL(params, e)))
       }
     ),
