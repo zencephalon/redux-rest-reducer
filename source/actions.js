@@ -195,8 +195,8 @@ export const withImageActionFactory = (generic, imageParam) => {
       dispatch => (
         postImage(image, thumbnail).then(j =>
           dispatch(generic.POST(id, {
-            [imageParam]: j.result,
             ...data,
+            [imageParam]: j.result,
           }))
         )
       )
@@ -205,8 +205,8 @@ export const withImageActionFactory = (generic, imageParam) => {
       dispatch => (
         postImage(image, thumbnail).then(j =>
           dispatch(generic.PUT(id, {
-            [imageParam]: j.result,
             ...data,
+            [imageParam]: j.result,
           }))
         )
       )

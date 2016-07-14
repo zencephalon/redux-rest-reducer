@@ -65,6 +65,8 @@ describe('Array', () => {
     })
   })
   describe('INDEX.CONFIRM', () => {
+    it('should populate the things cache', () => {
 
+    })
   })
 })
