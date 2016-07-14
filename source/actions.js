@@ -204,13 +204,10 @@ export const withImageActionFactory = (generic, imageParam) => {
     PUT_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (
         postImage(image, thumbnail).then(j => {
-          console.log("got result", j)
-          console.log("imageParam", imageParam)
           const output = {
             ...data,
             [imageParam]: j.result,
           }
-          console.log("output", output)
           dispatch(generic.PUT(id, output))
         }
         )

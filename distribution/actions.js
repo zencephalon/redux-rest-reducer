@@ -246,10 +246,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
         return (0, _api.postImage)(image, thumbnail).then(function (j) {
-          console.log("got result", j);
-          console.log("imageParam", imageParam);
           var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
-          console.log("output", output);
           dispatch(generic.PUT(id, output));
         });
       };
