@@ -238,7 +238,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
         return (0, _api.postImage)(image, thumbnail).then(function (j) {
-          return dispatch(generic.POST(id, _extends(_defineProperty({}, imageParam, j.result), data)));
+          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
         });
       };
     },
@@ -246,7 +246,11 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
         return (0, _api.postImage)(image, thumbnail).then(function (j) {
-          return dispatch(generic.PUT(id, _extends(_defineProperty({}, imageParam, j.result), data)));
+          console.log("got result", j);
+          console.log("imageParam", imageParam);
+          var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
+          console.log("output", output);
+          dispatch(generic.PUT(id, output));
         });
       };
     }
