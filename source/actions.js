@@ -193,7 +193,7 @@ export const actionFactory = (stateName, t, api) => {
         } = getState()[stateName].http.things[id] || {
           data: {},
         }
-        return dispatch(promise.PUT(id, Object.assign(oldData, data)))
+        return dispatch(promise.PUT(id, Object.assign({}, oldData, data)))
       }
     ),
     action,
