@@ -80,9 +80,6 @@ export const actionFactory = (stateName, t, api) => {
     CACHE_HIT: (id, data) => (
       { type: t.GET.CACHE_HIT, id, data }
     ),
-    WAIT: (id) => (
-      { type: t.GET.WAIT, id }
-    ),
   }
 
   action.INDEX = {
@@ -134,8 +131,8 @@ export const actionFactory = (stateName, t, api) => {
         } = getState()[stateName].http.things[id] || {
           GET: { requested: false },
         }
-        console.log('requested state in GET', requested)
-        if (requested) return dispatch(action.GET.WAIT(id))
+        // If we already have an on-going request just wait for it to finish
+        if (requested) return
 
         dispatch(action.GET.REQUEST(id))
         return api.GET(id)

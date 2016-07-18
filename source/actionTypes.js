@@ -4,7 +4,7 @@ const actionTypes = (name) => {
     'SELECT',
     'UNSELECT',
     'SET_SELECT',
-    'SET_ADD_ANOTHER'
+    'SET_ADD_ANOTHER',
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {
@@ -12,10 +12,10 @@ const actionTypes = (name) => {
   })
 
   const requestTypes = ['DELETE', 'POST', 'GET', 'PUT', 'INDEX']
-  const statuses = ['REQUEST', 'CONFIRM', 'FAIL', 'CACHE_HIT', 'WAIT']
+  const statuses = ['REQUEST', 'CONFIRM', 'FAIL', 'CACHE_HIT']
 
   requestTypes.forEach((type) => {
-    var obj = {}
+    const obj = {}
     statuses.forEach((status) => {
       obj[status] = `NEO/${name}/${type}/${status}`
     })

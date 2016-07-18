@@ -91,9 +91,6 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     CACHE_HIT: function CACHE_HIT(id, data) {
       return { type: t.GET.CACHE_HIT, id: id, data: data };
-    },
-    WAIT: function WAIT(id) {
-      return { type: t.GET.WAIT, id: id };
     }
   };
 
@@ -153,9 +150,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         };
 
         var requested = _ref.GET.requested;
+        // If we already have an on-going request just wait for it to finish
 
-        console.log('requested state in GET', requested);
-        if (requested) return dispatch(action.GET.WAIT(id));
+        if (requested) return;
 
         dispatch(action.GET.REQUEST(id));
         return api.GET(id).then(function (json) {
