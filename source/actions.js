@@ -80,6 +80,9 @@ export const actionFactory = (stateName, t, api) => {
     CACHE_HIT: (id, data) => (
       { type: t.GET.CACHE_HIT, id, data }
     ),
+    WAIT: (id) => (
+      { type: t.GET.WAIT, id }
+    ),
   }
 
   action.INDEX = {
@@ -158,8 +161,18 @@ export const actionFactory = (stateName, t, api) => {
       dispatch => dispatch(promise.INDEX_BY_PARAMS(params))
     ),
     DELETE: id => dispatch => dispatch(promise.DELETE(id)),
-    GET: id => dispatch => dispatch(promise.GET(id)),
-    GET_CACHE: (id) => (
+    GET: id => (
+      (dispatch, getState) => {
+        const {
+          GET: { requested },
+        } = getState()[stateName].http.things[id] || {
+          GET: { requested: false },
+        }
+        if (requested) return dispatch(action.GET.WAIT(id))
+        return dispatch(promise.GET(id))
+      }
+    ),
+    GET_CACHE: id => (
       (dispatch, getState) => {
         // Check cache before making request
         const {

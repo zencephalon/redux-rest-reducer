@@ -91,6 +91,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     CACHE_HIT: function CACHE_HIT(id, data) {
       return { type: t.GET.CACHE_HIT, id: id, data: data };
+    },
+    WAIT: function WAIT(id) {
+      return { type: t.GET.WAIT, id: id };
     }
   };
 
@@ -192,7 +195,14 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       };
     },
     GET: function GET(id) {
-      return function (dispatch) {
+      return function (dispatch, getState) {
+        var _ref = getState()[stateName].http.things[id] || {
+          GET: { requested: false }
+        };
+
+        var requested = _ref.GET.requested;
+
+        if (requested) return dispatch(action.GET.WAIT(id));
         return dispatch(promise.GET(id));
       };
     },
@@ -200,13 +210,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         // Check cache before making request
 
-        var _ref = getState()[stateName].http.things[id] || {
+        var _ref2 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
         };
 
-        var data = _ref.data;
-        var confirmed = _ref.GET.confirmed;
+        var data = _ref2.data;
+        var confirmed = _ref2.GET.confirmed;
 
 
         return dispatch(confirmed ? action.GET.CACHE_HIT(id, data) : promise.GET(id));
@@ -219,11 +229,11 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     PUT: function PUT(id, data) {
       return function (dispatch, getState) {
-        var _ref2 = getState()[stateName].http.things[id] || {
+        var _ref3 = getState()[stateName].http.things[id] || {
           data: {}
         };
 
-        var oldData = _ref2.data;
+        var oldData = _ref3.data;
 
         return dispatch(promise.PUT(id, Object.assign(oldData, data)));
       };
