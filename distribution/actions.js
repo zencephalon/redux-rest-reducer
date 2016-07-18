@@ -202,6 +202,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 
         var requested = _ref.GET.requested;
 
+        console.log('requested state in GET', requested);
         if (requested) return dispatch(action.GET.WAIT(id));
         return dispatch(promise.GET(id));
       };

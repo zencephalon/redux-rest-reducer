@@ -168,6 +168,7 @@ export const actionFactory = (stateName, t, api) => {
         } = getState()[stateName].http.things[id] || {
           GET: { requested: false },
         }
+        console.log('requested state in GET', requested)
         if (requested) return dispatch(action.GET.WAIT(id))
         return dispatch(promise.GET(id))
       }
