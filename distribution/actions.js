@@ -147,7 +147,16 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       };
     },
     GET: function GET(id) {
-      return function (dispatch) {
+      return function (dispatch, getState) {
+        var _ref = getState()[stateName].http.things[id] || {
+          GET: { requested: false }
+        };
+
+        var requested = _ref.GET.requested;
+
+        console.log('requested state in GET', requested);
+        if (requested) return dispatch(action.GET.WAIT(id));
+
         dispatch(action.GET.REQUEST(id));
         return api.GET(id).then(function (json) {
           return dispatch(action.GET.CONFIRM(id, json.result));
@@ -195,15 +204,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       };
     },
     GET: function GET(id) {
-      return function (dispatch, getState) {
-        var _ref = getState()[stateName].http.things[id] || {
-          GET: { requested: false }
-        };
-
-        var requested = _ref.GET.requested;
-
-        console.log('requested state in GET', requested);
-        if (requested) return dispatch(action.GET.WAIT(id));
+      return function (dispatch) {
         return dispatch(promise.GET(id));
       };
     },
@@ -236,7 +237,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 
         var oldData = _ref3.data;
 
-        return dispatch(promise.PUT(id, Object.assign(oldData, data)));
+        return dispatch(promise.PUT(id, Object.assign({}, oldData, data)));
       };
     },
     action: action
