@@ -128,7 +128,15 @@ export const actionFactory = (stateName, t, api) => {
       }
     ),
     GET: (id) => (
-      dispatch => {
+      (dispatch, getState) => {
+        const {
+          GET: { requested },
+        } = getState()[stateName].http.things[id] || {
+          GET: { requested: false },
+        }
+        console.log('requested state in GET', requested)
+        if (requested) return dispatch(action.GET.WAIT(id))
+
         dispatch(action.GET.REQUEST(id))
         return api.GET(id)
           .then(json => dispatch(action.GET.CONFIRM(id, json.result)))
@@ -161,18 +169,7 @@ export const actionFactory = (stateName, t, api) => {
       dispatch => dispatch(promise.INDEX_BY_PARAMS(params))
     ),
     DELETE: id => dispatch => dispatch(promise.DELETE(id)),
-    GET: id => (
-      (dispatch, getState) => {
-        const {
-          GET: { requested },
-        } = getState()[stateName].http.things[id] || {
-          GET: { requested: false },
-        }
-        console.log('requested state in GET', requested)
-        if (requested) return dispatch(action.GET.WAIT(id))
-        return dispatch(promise.GET(id))
-      }
-    ),
+    GET: id => dispatch => dispatch(promise.GET(id)),
     GET_CACHE: id => (
       (dispatch, getState) => {
         // Check cache before making request
