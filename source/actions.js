@@ -196,24 +196,24 @@ export const actionFactory = (stateName, t, api) => {
   }
 }
 
-export const withImageActionFactory = (generic, api) => {
+export const withImageActionFactory = (generic, imageParam, postImage) => {
   const promise = {
     POST_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (
-        api.postImage(image, thumbnail).then(j =>
+        postImage(image, thumbnail).then(j =>
           dispatch(generic.POST(id, {
             ...data,
-            [api.imageParam]: j.result,
+            [imageParam]: j.result,
           }))
         )
       )
     ),
     PUT_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (
-        api.postImage(image, thumbnail).then(j => {
+        postImage(image, thumbnail).then(j => {
           const output = {
             ...data,
-            [api.imageParam]: j.result,
+            [imageParam]: j.result,
           }
           dispatch(generic.PUT(id, output))
         }

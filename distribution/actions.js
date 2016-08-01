@@ -239,21 +239,21 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 };
 
-var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, api) {
+var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam, postImage) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
-        return api.postImage(image, thumbnail).then(function (j) {
-          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, api.imageParam, j.result))));
+        return postImage(image, thumbnail).then(function (j) {
+          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
         });
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
-        return api.postImage(image, thumbnail).then(function (j) {
-          var output = _extends({}, data, _defineProperty({}, api.imageParam, j.result));
+        return postImage(image, thumbnail).then(function (j) {
+          var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
           dispatch(generic.PUT(id, output));
         });
       };
