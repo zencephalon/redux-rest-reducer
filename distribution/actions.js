@@ -7,8 +7,6 @@ exports.withImageActionFactory = exports.actionFactory = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _api = require('./api');
-
 var _lodash = require('lodash');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -241,21 +239,21 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 };
 
-var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam) {
+var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, api) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
-        return (0, _api.postImage)(image, thumbnail).then(function (j) {
-          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
+        return api.postImage(image, thumbnail).then(function (j) {
+          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, api.imageParam, j.result))));
         });
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
       var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
       return function (dispatch) {
-        return (0, _api.postImage)(image, thumbnail).then(function (j) {
-          var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
+        return api.postImage(image, thumbnail).then(function (j) {
+          var output = _extends({}, data, _defineProperty({}, api.imageParam, j.result));
           dispatch(generic.PUT(id, output));
         });
       };

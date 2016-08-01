@@ -1,4 +1,3 @@
-import { postImage } from './api'
 import { sortBy } from 'lodash'
 
 export const actionFactory = (stateName, t, api) => {
@@ -197,24 +196,24 @@ export const actionFactory = (stateName, t, api) => {
   }
 }
 
-export const withImageActionFactory = (generic, imageParam) => {
+export const withImageActionFactory = (generic, api) => {
   const promise = {
     POST_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (
-        postImage(image, thumbnail).then(j =>
+        api.postImage(image, thumbnail).then(j =>
           dispatch(generic.POST(id, {
             ...data,
-            [imageParam]: j.result,
+            [api.imageParam]: j.result,
           }))
         )
       )
     ),
     PUT_WITH_IMG: (id, data, image, thumbnail = false) => (
       dispatch => (
-        postImage(image, thumbnail).then(j => {
+        api.postImage(image, thumbnail).then(j => {
           const output = {
             ...data,
-            [imageParam]: j.result,
+            [api.imageParam]: j.result,
           }
           dispatch(generic.PUT(id, output))
         }
