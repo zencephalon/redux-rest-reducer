@@ -198,9 +198,9 @@ export const actionFactory = (stateName, t, api) => {
 
 export const withImageActionFactory = (generic, imageParam, postImage) => {
   const promise = {
-    POST_WITH_IMG: (id, data, image, thumbnail = false) => (
+    POST_WITH_IMG: (id, data, image, type = 'thumbnail') => (
       dispatch => (
-        postImage(image, thumbnail).then(j =>
+        postImage(image, type).then(j =>
           dispatch(generic.POST(id, {
             ...data,
             [imageParam]: j.result,
@@ -208,9 +208,9 @@ export const withImageActionFactory = (generic, imageParam, postImage) => {
         )
       )
     ),
-    PUT_WITH_IMG: (id, data, image, thumbnail = false) => (
+    PUT_WITH_IMG: (id, data, image, type = 'thumbnail') => (
       dispatch => (
-        postImage(image, thumbnail).then(j => {
+        postImage(image, type).then(j => {
           const output = {
             ...data,
             [imageParam]: j.result,
@@ -222,20 +222,20 @@ export const withImageActionFactory = (generic, imageParam, postImage) => {
     ),
   }
   return {
-    POST_WITH_IMG: (id, data, image, thumbnail = false) => (
+    POST_WITH_IMG: (id, data, image, type = 'thumbnail') => (
       dispatch => {
         // Provides feedback to the form that we've started processing
         // the overall request
         dispatch(generic.action.POST.REQUEST(id))
-        return dispatch(promise.POST_WITH_IMG(id, data, image, thumbnail))
+        return dispatch(promise.POST_WITH_IMG(id, data, image, type))
       }
     ),
-    PUT_WITH_IMG: (id, data, image, thumbnail = false) => (
+    PUT_WITH_IMG: (id, data, image, type = 'thumbnail') => (
       dispatch => {
         // Provides feedback to the form that we've started processing
         // the overall request
         dispatch(generic.action.PUT.REQUEST(id))
-        return dispatch(promise.PUT_WITH_IMG(id, data, image, thumbnail))
+        return dispatch(promise.PUT_WITH_IMG(id, data, image, type))
       }
     ),
   }

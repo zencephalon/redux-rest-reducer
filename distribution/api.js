@@ -33,7 +33,7 @@ function configureAPI(API_URL) {
       if (!r.ok) {
         throw Error(r.statusText);
       }
-      return json ? r.json() : null;
+      return json ? r.json() : r;
     });
   }
 
@@ -74,9 +74,8 @@ function configureAPI(API_URL) {
   }
 
   function postImage(imageFormData) {
-    var thumbnail = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var type = arguments.length <= 1 || arguments[1] === undefined ? 'thumbnail' : arguments[1];
 
-    var type = thumbnail ? 'thumbnail' : 'cms_regular';
     return postMultipartToAPI('image/?image-type=' + type, {
       body: imageFormData
     }, true);

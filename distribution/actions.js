@@ -206,7 +206,6 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     GET_CACHE: function GET_CACHE(id) {
       return function (dispatch, getState) {
         // Check cache before making request
-
         var _ref2 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
@@ -242,17 +241,17 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam, postImage) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
       return function (dispatch) {
-        return postImage(image, thumbnail).then(function (j) {
+        return postImage(image, type).then(function (j) {
           return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
         });
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
       return function (dispatch) {
-        return postImage(image, thumbnail).then(function (j) {
+        return postImage(image, type).then(function (j) {
           var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
           dispatch(generic.PUT(id, output));
         });
@@ -261,21 +260,21 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
   };
   return {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request
         dispatch(generic.action.POST.REQUEST(id));
-        return dispatch(promise.POST_WITH_IMG(id, data, image, thumbnail));
+        return dispatch(promise.POST_WITH_IMG(id, data, image, type));
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var thumbnail = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request
         dispatch(generic.action.PUT.REQUEST(id));
-        return dispatch(promise.PUT_WITH_IMG(id, data, image, thumbnail));
+        return dispatch(promise.PUT_WITH_IMG(id, data, image, type));
       };
     }
   };
