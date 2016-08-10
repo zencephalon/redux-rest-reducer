@@ -16,7 +16,7 @@ export default function configureAPI(API_URL) {
       if (!r.ok) {
         throw Error(r.statusText)
       }
-      return json ? r.json() : null
+      return json ? r.json() : r
     })
   }
 
@@ -50,8 +50,7 @@ export default function configureAPI(API_URL) {
       })
   }
 
-  function postImage(imageFormData, thumbnail = false) {
-    const type = thumbnail ? 'thumbnail' : 'cms_regular'
+  function postImage(imageFormData, type = 'thumbnail') {
     return postMultipartToAPI(`image/?image-type=${type}`, {
       body: imageFormData,
     }, true)
