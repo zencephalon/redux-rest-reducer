@@ -1,6 +1,6 @@
 {
   "name": "react-redux-lib",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Action and reducer infrastructure around Redux",
   "main": "distribution/index.js",
   "scripts": {

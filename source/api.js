@@ -1,3 +1,5 @@
+import { find } from 'lodash'
+
 const CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json'
 
 export default function configureAPI(API_URL) {
@@ -14,7 +16,23 @@ export default function configureAPI(API_URL) {
       headers,
     }, options)).then(r => {
       if (!r.ok) {
+        if (r.status === 401) {
+          localStorage.removeItem('jwt_token')
+        }
         throw Error(r.statusText)
+      }
+      const newToken = r.headers.get('X-AUTH-TOKEN')
+      const requestProperty = r.headers.get('X-AUTH-HOTEL')
+      const allProperties = JSON.parse(localStorage.getItem('all_properties'))
+      const requestToken = find(allProperties, { propertyId: requestProperty }).token
+      if (newToken) {
+        if (localStorage.getItem('jwt_token') === requestToken) {
+          localStorage.setItem('jwt_token', newToken)
+        }
+        localStorage.setItem('all_properties', JSON.stringify({
+          ...allProperties,
+          [requestProperty]: newToken,
+        }))
       }
       return json ? r.json() : r
     })
