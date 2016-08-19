@@ -3,7 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = configureAPI;
+
+var _lodash = require('lodash');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json';
 
 function configureAPI(API_URL) {
@@ -31,7 +39,20 @@ function configureAPI(API_URL) {
       headers: headers
     }, options)).then(function (r) {
       if (!r.ok) {
+        if (r.status === 401) {
+          localStorage.removeItem('jwt_token');
+        }
         throw Error(r.statusText);
+      }
+      var newToken = r.headers.get('X-AUTH-TOKEN');
+      var requestProperty = r.headers.get('X-AUTH-HOTEL');
+      var allProperties = JSON.parse(localStorage.getItem('all_properties'));
+      var requestToken = (0, _lodash.find)(allProperties, { propertyId: requestProperty }).token;
+      if (newToken) {
+        if (localStorage.getItem('jwt_token') === requestToken) {
+          localStorage.setItem('jwt_token', newToken);
+        }
+        localStorage.setItem('all_properties', JSON.stringify(_extends({}, allProperties, _defineProperty({}, requestProperty, newToken))));
       }
       return json ? r.json() : r;
     });

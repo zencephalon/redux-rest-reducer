@@ -206,6 +206,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     GET_CACHE: function GET_CACHE(id) {
       return function (dispatch, getState) {
         // Check cache before making request
+
         var _ref2 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
