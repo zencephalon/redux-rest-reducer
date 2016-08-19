@@ -22,10 +22,11 @@ export default function configureAPI(API_URL) {
         throw Error(r.statusText)
       }
       const newToken = r.headers.get('X-AUTH-TOKEN')
-      const requestProperty = r.headers.get('X-AUTH-HOTEL')
-      const allProperties = JSON.parse(localStorage.getItem('all_properties'))
-      const requestToken = find(allProperties, { propertyId: requestProperty }).token
       if (newToken) {
+        const requestProperty = r.headers.get('X-AUTH-HOTEL')
+        const allProperties = JSON.parse(localStorage.getItem('all_properties'))
+        const requestToken = find(allProperties, { propertyId: requestProperty }).token
+
         if (localStorage.getItem('jwt_token') === requestToken) {
           localStorage.setItem('jwt_token', newToken)
         }

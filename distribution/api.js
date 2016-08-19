@@ -45,10 +45,11 @@ function configureAPI(API_URL) {
         throw Error(r.statusText);
       }
       var newToken = r.headers.get('X-AUTH-TOKEN');
-      var requestProperty = r.headers.get('X-AUTH-HOTEL');
-      var allProperties = JSON.parse(localStorage.getItem('all_properties'));
-      var requestToken = (0, _lodash.find)(allProperties, { propertyId: requestProperty }).token;
       if (newToken) {
+        var requestProperty = r.headers.get('X-AUTH-HOTEL');
+        var allProperties = JSON.parse(localStorage.getItem('all_properties'));
+        var requestToken = (0, _lodash.find)(allProperties, { propertyId: requestProperty }).token;
+
         if (localStorage.getItem('jwt_token') === requestToken) {
           localStorage.setItem('jwt_token', newToken);
         }
