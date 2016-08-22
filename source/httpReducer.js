@@ -86,39 +86,49 @@ export function reducerFactory(t) {
 
     switch (action.type) {
       case t.INVALIDATE:
-        return Object.assign({}, state, {
+        return {
+          ...state,
           things: reject(state.things, thing => thing.id === action.id),
-        })
+        }
       case t.GET.REQUEST:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id].GET.requested = true
 
-        return Object.assign({}, state, { things })
+        return {
+          ...state,
+          things,
+        }
       case t.GET.CONFIRM:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
           ...things[action.id],
           GET: {
-            requested: false, failed: false, confirmed: true,
+            requested: false,
+            failed: false,
+            confirmed: true,
           },
-          data: action.data }
+          data: action.data,
+        }
 
         collections = mapValues(state.collections, collection => (
-            Object.assign({}, collection, {
-              data: collection.data.map(thing =>
-                (thing.id === action.id ? action.data : thing)),
-            })
-          ))
+          {
+            ...collection,
+            data: collection.data.map(thing =>
+              (thing.id === action.id ? action.data : thing)),
+          }
+        ))
 
-        return Object.assign({}, state, {
-          things, collections,
-        })
+        return {
+          ...state,
+          things,
+          collections,
+        }
       case t.GET.FAIL:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
@@ -129,21 +139,24 @@ export function reducerFactory(t) {
             confirmed: false,
           },
         }
-        return Object.assign({}, state, {
+
+        return {
+          ...state,
           things,
-        })
+        }
       case t.INDEX.REQUEST:
-        collections = Object.assign({}, state.collections)
+        collections = { ...state.collections }
         collections[action.params] = {
           data: [],
           requested: true,
           failed: false,
           confirmed: false,
         }
-        return Object.assign({}, state, { collections })
+
+        return { ...state, collections }
       case t.INDEX.CONFIRM:
-        collections = Object.assign({}, state.collections)
-        things = Object.assign({}, state.things)
+        collections = { ...state.collections }
+        things = { ...state.things }
 
         for (const datum of action.data) {
           if (!things[datum.id]) {
@@ -163,18 +176,20 @@ export function reducerFactory(t) {
           failed: false,
           confirmed: true,
         }
-        return Object.assign({}, state, { collections, things })
+
+        return { ...state, collections, things }
       case t.INDEX.FAIL:
-        collections = Object.assign({}, state.collections)
+        collections = { ...state.collections }
         collections[action.params] = {
           data: [],
           requested: false,
           failed: true,
           confirmed: false,
         }
-        return Object.assign({}, state, { collections })
+
+        return { ...state, collections }
       case t.DELETE.REQUEST:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
         things[action.id] = {
           ...things[action.id],
           DELETE: {
@@ -183,24 +198,10 @@ export function reducerFactory(t) {
             confirmed: false,
           },
         }
-        return Object.assign({}, state, {
-          things,
-        })
+
+        return { ...state, things }
       case t.DELETE.FAIL:
-        things = Object.assign({}, state.things)
-        things[action.id] = {
-          ...things[action.id],
-          DELETE: {
-            requested: false,
-            failed: false,
-            confirmed: true,
-          },
-        }
-        return Object.assign({}, state, {
-          things,
-        })
-      case t.DELETE.CONFIRM:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
         things[action.id] = {
           ...things[action.id],
           DELETE: {
@@ -210,33 +211,52 @@ export function reducerFactory(t) {
           },
         }
 
-        collections = mapValues(state.collections, collection =>
-          Object.assign({}, collection, {
+        return { ...state, things }
+      case t.DELETE.CONFIRM:
+        things = { ...state.things }
+        things[action.id] = {
+          ...things[action.id],
+          DELETE: {
+            requested: false,
+            failed: false,
+            confirmed: true,
+          },
+        }
+
+        collections = mapValues(state.collections, collection => (
+          {
+            ...collection,
             data: collection.data.filter(thing =>
               thing.id !== action.id),
-          })
-        )
+          }
+        ))
 
-        return Object.assign({}, state, {
-          things, collections,
-        })
+        return { ...state, things, collections }
       case t.POST.REQUEST:
-        POST = Object.assign({}, state.POST)
-        POST[action.id] = { requested: true, failed: false, confirmed: false, data: action.data }
-        return Object.assign({}, state, { POST })
+        POST = { ...state.POST }
+        POST[action.id] = {
+          requested: true,
+          failed: false,
+          confirmed: false,
+          data: action.data,
+        }
+
+        return { ...state, POST }
       case t.POST.CONFIRM:
-        POST = Object.assign({}, state.POST)
+        POST = { ...state.POST }
         POST[action.id] = {
           requested: false,
           failed: false,
           confirmed: true,
-          data: Object.assign({}, POST[action.id].data, {
+          data: {
+            ...POST[action.id].data,
             id: action.data,
-          }),
+          },
         }
-        return Object.assign({}, state, { POST })
+
+        return { ...state, POST }
       case t.POST.FAIL:
-        POST = Object.assign({}, state.POST)
+        POST = { ...state.POST }
 
         POST[action.id] = {
           requested: false,
@@ -244,9 +264,10 @@ export function reducerFactory(t) {
           confirmed: false,
           data: action.data,
         }
-        return Object.assign({}, state, { POST })
+
+        return { ...state, POST }
       case t.PUT.REQUEST:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
@@ -257,11 +278,10 @@ export function reducerFactory(t) {
             confirmed: false,
           },
         }
-        return Object.assign({}, state, {
-          things,
-        })
+
+        return { ...state, things }
       case t.PUT.CONFIRM:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
@@ -275,18 +295,17 @@ export function reducerFactory(t) {
         }
 
         collections = mapValues(state.collections, collection => (
-          Object.assign({}, collection, {
+          {
+            ...collection,
             data: collection.data.map(thing => (
               thing.id === action.id ? action.data : thing
             )),
-          }))
-        )
+          }
+        ))
 
-        return Object.assign({}, state, {
-          things, collections,
-        })
+        return { ...state, things, collections }
       case t.PUT.FAIL:
-        things = Object.assign({}, state.things)
+        things = { ...state.things }
 
         things[action.id] = things[action.id] || thingDefault()
         things[action.id] = {
@@ -297,9 +316,8 @@ export function reducerFactory(t) {
             confirmed: false,
           },
         }
-        return Object.assign({}, state, {
-          things,
-        })
+
+        return { ...state, things }
       default:
         return state
     }
