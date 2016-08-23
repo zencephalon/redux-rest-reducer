@@ -9,6 +9,7 @@ export default function configureAPI(API_URL) {
       Accept: CONTENT_TYPE,
     }
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
+    // Send up our token
     if (authToken && authToken !== 'null') {
       headers['X-AUTH-TOKEN'] = authToken
     }
@@ -16,20 +17,29 @@ export default function configureAPI(API_URL) {
       headers,
     }, options)).then(r => {
       if (!r.ok) {
+        // ILUVU: 401 means we used an expired token and we should logout
         if (r.status === 401) {
           localStorage.removeItem('jwt_token')
         }
         throw Error(r.statusText)
       }
       const newToken = r.headers.get('X-AUTH-TOKEN')
+      // ILUVU: Check whether we got back a new token in the headers.
+      // We will if our token will expire soon, and we should replace it.
       if (newToken) {
+        // Which property did we make the request for?
         const requestProperty = r.headers.get('X-AUTH-HOTEL')
         const allProperties = JSON.parse(localStorage.getItem('all_properties'))
-        const requestToken = find(allProperties, { propertyId: requestProperty }).token
+        // Find the token we used to make the request
+        const requestToken = find(allProperties, {
+          propertyId: requestProperty,
+        }).token
 
+        // Replace the current jwt_token if we used it to make this request
         if (localStorage.getItem('jwt_token') === requestToken) {
           localStorage.setItem('jwt_token', newToken)
         }
+        // Always replace the token in the all_properties map
         localStorage.setItem('all_properties', JSON.stringify({
           ...allProperties,
           [requestProperty]: newToken,
@@ -82,20 +92,14 @@ export default function configureAPI(API_URL) {
         return fetchFromAPI(req)
       },
       INDEX_BY_PARAMS: (params) => fetchFromAPI(`${endpoint}/?${params}`),
-      POST: (item) => {
-        const newItem = Object.assign({}, template, item)
-        return postToAPI(`${endpoint}/`, {
-          body: JSON.stringify(newItem),
-        })
-      },
+      POST: (item) => postToAPI(`${endpoint}/`, {
+        body: JSON.stringify({ ...template, ...item }),
+      }),
       GET: (id) => fetchFromAPI(`${endpoint}/${id}`),
       DELETE: (id) => deleteFromAPI(`${endpoint}/${id}`),
-      PUT: (id, item) => {
-        const newItem = Object.assign({}, template, item)
-        return putToAPI(`${endpoint}/${id}`, {
-          body: JSON.stringify(newItem),
-        })
-      },
+      PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
+        body: JSON.stringify({ ...template, ...item }),
+      }),
     }
   }
 

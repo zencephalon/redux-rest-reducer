@@ -32,6 +32,7 @@ function configureAPI(API_URL) {
     if (!image) {
       headers['Content-Type'] = CONTENT_TYPE;
     }
+    // Send up our token
     if (authToken && authToken !== 'null') {
       headers['X-AUTH-TOKEN'] = authToken;
     }
@@ -39,20 +40,29 @@ function configureAPI(API_URL) {
       headers: headers
     }, options)).then(function (r) {
       if (!r.ok) {
+        // ILUVU: 401 means we used an expired token and we should logout
         if (r.status === 401) {
           localStorage.removeItem('jwt_token');
         }
         throw Error(r.statusText);
       }
       var newToken = r.headers.get('X-AUTH-TOKEN');
+      // ILUVU: Check whether we got back a new token in the headers.
+      // We will if our token will expire soon, and we should replace it.
       if (newToken) {
+        // Which property did we make the request for?
         var requestProperty = r.headers.get('X-AUTH-HOTEL');
         var allProperties = JSON.parse(localStorage.getItem('all_properties'));
-        var requestToken = (0, _lodash.find)(allProperties, { propertyId: requestProperty }).token;
+        // Find the token we used to make the request
+        var requestToken = (0, _lodash.find)(allProperties, {
+          propertyId: requestProperty
+        }).token;
 
+        // Replace the current jwt_token if we used it to make this request
         if (localStorage.getItem('jwt_token') === requestToken) {
           localStorage.setItem('jwt_token', newToken);
         }
+        // Always replace the token in the all_properties map
         localStorage.setItem('all_properties', JSON.stringify(_extends({}, allProperties, _defineProperty({}, requestProperty, newToken))));
       }
       return json ? r.json() : r;
@@ -113,9 +123,8 @@ function configureAPI(API_URL) {
         return fetchFromAPI(endpoint + '/?' + params);
       },
       POST: function POST(item) {
-        var newItem = Object.assign({}, template, item);
         return postToAPI(endpoint + '/', {
-          body: JSON.stringify(newItem)
+          body: JSON.stringify(_extends({}, template, item))
         });
       },
       GET: function GET(id) {
@@ -125,9 +134,8 @@ function configureAPI(API_URL) {
         return deleteFromAPI(endpoint + '/' + id);
       },
       PUT: function PUT(id, item) {
-        var newItem = Object.assign({}, template, item);
         return putToAPI(endpoint + '/' + id, {
-          body: JSON.stringify(newItem)
+          body: JSON.stringify(_extends({}, template, item))
         });
       }
     };
