@@ -31,9 +31,10 @@ export default function configureAPI(API_URL) {
         const requestProperty = r.headers.get('X-AUTH-HOTEL')
         const allProperties = JSON.parse(localStorage.getItem('all_properties'))
         // Find the token we used to make the request
-        const requestToken = find(allProperties, {
+        const requestPropertyEntry = find(allProperties, {
           propertyId: requestProperty,
-        }).token
+        })
+        const requestToken = requestPropertyEntry ? requestPropertyEntry.token : null
 
         // Replace the current jwt_token if we used it to make this request
         if (localStorage.getItem('jwt_token') === requestToken) {

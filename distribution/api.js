@@ -54,9 +54,10 @@ function configureAPI(API_URL) {
         var requestProperty = r.headers.get('X-AUTH-HOTEL');
         var allProperties = JSON.parse(localStorage.getItem('all_properties'));
         // Find the token we used to make the request
-        var requestToken = (0, _lodash.find)(allProperties, {
+        var requestPropertyEntry = (0, _lodash.find)(allProperties, {
           propertyId: requestProperty
-        }).token;
+        });
+        var requestToken = requestPropertyEntry ? requestPropertyEntry.token : null;
 
         // Replace the current jwt_token if we used it to make this request
         if (localStorage.getItem('jwt_token') === requestToken) {
