@@ -107,6 +107,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now()
       };
+    },
+    CACHE_HIT: function CACHE_HIT(id, data) {
+      return { type: t.INDEX.CACHE_HIT, id: id, data: data };
     }
   };
 
@@ -183,14 +186,42 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 
   return {
-    INDEX: function INDEX(id) {
+    INDEX: function INDEX(id, sortOrder) {
       return function (dispatch) {
-        return dispatch(promise.INDEX(id));
+        return dispatch(promise.INDEX(id, sortOrder));
       };
     },
-    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
+    INDEX_CACHE: function INDEX_CACHE(id) {
+      return function (dispatch, getState) {
+        var _ref2 = getState()[stateName].http.collections[id] || {
+          data: null,
+          confirmed: false
+        };
+
+        var data = _ref2.data;
+        var confirmed = _ref2.confirmed;
+
+
+        return dispatch(confirmed ? action.INDEX.CACHE_HIT(id, data) : promise.INDEX(id));
+      };
+    },
+    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params, sortOrder) {
       return function (dispatch) {
-        return dispatch(promise.INDEX_BY_PARAMS(params));
+        return dispatch(promise.INDEX_BY_PARAMS(params, sortOrder));
+      };
+    },
+    INDEX_BY_PARAMS_CACHE: function INDEX_BY_PARAMS_CACHE(params) {
+      return function (dispatch, getState) {
+        var _ref3 = getState()[stateName].http.collections[params] || {
+          data: null,
+          confirmed: false
+        };
+
+        var data = _ref3.data;
+        var confirmed = _ref3.confirmed;
+
+
+        return dispatch(confirmed ? action.INDEX.CACHE_HIT(params, data) : promise.INDEX_BY_PARAMS(params));
       };
     },
     DELETE: function DELETE(id) {
@@ -207,13 +238,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         // Check cache before making request
 
-        var _ref2 = getState()[stateName].http.things[id] || {
+        var _ref4 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
         };
 
-        var data = _ref2.data;
-        var confirmed = _ref2.GET.confirmed;
+        var data = _ref4.data;
+        var confirmed = _ref4.GET.confirmed;
 
 
         return dispatch(confirmed ? action.GET.CACHE_HIT(id, data) : promise.GET(id));
@@ -226,13 +257,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     PUT: function PUT(id, data) {
       return function (dispatch, getState) {
-        var _ref3 = getState()[stateName].http.things[id] || {
+        var _ref5 = getState()[stateName].http.things[id] || {
           data: {}
         };
 
-        var oldData = _ref3.data;
+        var oldData = _ref5.data;
 
-        return dispatch(promise.PUT(id, Object.assign({}, oldData, data)));
+        return dispatch(promise.PUT(id, _extends({}, oldData, data)));
       };
     },
     action: action

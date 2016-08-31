@@ -96,6 +96,9 @@ export const actionFactory = (stateName, t, api) => {
         receivedAt: Date.now(),
       }
     ),
+    CACHE_HIT: (id, data) => (
+      { type: t.INDEX.CACHE_HIT, id, data }
+    ),
   }
 
   const promise = {
@@ -160,9 +163,37 @@ export const actionFactory = (stateName, t, api) => {
   }
 
   return {
-    INDEX: id => dispatch => dispatch(promise.INDEX(id)),
-    INDEX_BY_PARAMS: params => (
-      dispatch => dispatch(promise.INDEX_BY_PARAMS(params))
+    INDEX: (id, sortOrder) => dispatch => dispatch(promise.INDEX(id, sortOrder)),
+    INDEX_CACHE: id => (
+      (dispatch, getState) => {
+        const {
+          data,
+          confirmed,
+        } = getState()[stateName].http.collections[id] || {
+          data: null,
+          confirmed: false,
+        }
+
+        return dispatch(confirmed ?
+          action.INDEX.CACHE_HIT(id, data) : promise.INDEX(id))
+      }
+    ),
+    INDEX_BY_PARAMS: (params, sortOrder) => (
+      dispatch => dispatch(promise.INDEX_BY_PARAMS(params, sortOrder))
+    ),
+    INDEX_BY_PARAMS_CACHE: params => (
+      (dispatch, getState) => {
+        const {
+          data,
+          confirmed,
+        } = getState()[stateName].http.collections[params] || {
+          data: null,
+          confirmed: false,
+        }
+
+        return dispatch(confirmed ?
+          action.INDEX.CACHE_HIT(params, data) : promise.INDEX_BY_PARAMS(params))
+      }
     ),
     DELETE: id => dispatch => dispatch(promise.DELETE(id)),
     GET: id => dispatch => dispatch(promise.GET(id)),
@@ -189,7 +220,7 @@ export const actionFactory = (stateName, t, api) => {
         } = getState()[stateName].http.things[id] || {
           data: {},
         }
-        return dispatch(promise.PUT(id, Object.assign({}, oldData, data)))
+        return dispatch(promise.PUT(id, { ...oldData, ...data }))
       }
     ),
     action,
