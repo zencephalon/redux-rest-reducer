@@ -103,15 +103,7 @@ export const actionFactory = (stateName, t, api) => {
 
   const promise = {
     INDEX: (id, sortOrder) => (
-      (dispatch, getState) => {
-        const {
-          requested,
-        } = getState()[stateName].http.collections[id] || {
-          requested: false,
-        }
-
-        if (requested) return
-
+      dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
           .then(json => dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder)))
@@ -119,15 +111,7 @@ export const actionFactory = (stateName, t, api) => {
       }
     ),
     INDEX_BY_PARAMS: (params, sortOrder) => (
-      (dispatch, getState) => {
-        const {
-          requested,
-        } = getState()[stateName].http.collections[params] || {
-          requested: false,
-        }
-
-        if (requested) return
-
+      dispatch => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
           .then(json => dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder)))
