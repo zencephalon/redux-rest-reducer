@@ -162,7 +162,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
           queuePromise.then(function (result) {
             return action.GET.CONFIRM(id, result);
           });
-          return;
+          return queuePromise;
         }
 
         dispatch(action.GET.REQUEST(id));
