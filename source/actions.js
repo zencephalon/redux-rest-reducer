@@ -137,12 +137,12 @@ export const actionFactory = (stateName, t, api) => {
         }
         // If we already have an on-going request just wait for it to finish
         if (requested) {
-          const queuePromise = new Promise((resolve) => {
+          const queuePromise = new Promise(resolve => {
             getPromiseQueue.push(resolve)
           })
-          queuePromise.then((result) => {
-            console.log('Resolving promise in queue', id, result)
-            return dispatch(action.GET.CONFIRM(id, result))
+          queuePromise.then(json => {
+            console.log('Resolving promise in queue', id, json)
+            return dispatch(action.GET.CONFIRM(id, json.result))
           })
           return queuePromise
         }
@@ -151,8 +151,8 @@ export const actionFactory = (stateName, t, api) => {
         return api.GET(id)
           .then(json => {
             getPromiseQueue.forEach(resolve => {
-              console.log("ILUVU OMG RESOLVING QUEUED PROMISE", json.result)
-              resolve(json.result)
+              console.log('ILUVU OMG RESOLVING QUEUED PROMISE', json)
+              resolve(json)
             })
             getPromiseQueue = []
             return dispatch(action.GET.CONFIRM(id, json.result))

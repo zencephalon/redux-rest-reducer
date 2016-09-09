@@ -159,9 +159,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
           var queuePromise = new Promise(function (resolve) {
             getPromiseQueue.push(resolve);
           });
-          queuePromise.then(function (result) {
-            console.log('Resolving promise in queue', id, result);
-            return dispatch(action.GET.CONFIRM(id, result));
+          queuePromise.then(function (json) {
+            console.log('Resolving promise in queue', id, json);
+            return dispatch(action.GET.CONFIRM(id, json.result));
           });
           return queuePromise;
         }
@@ -169,8 +169,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         dispatch(action.GET.REQUEST(id));
         return api.GET(id).then(function (json) {
           getPromiseQueue.forEach(function (resolve) {
-            console.log("ILUVU OMG RESOLVING QUEUED PROMISE", json.result);
-            resolve(json.result);
+            console.log('ILUVU OMG RESOLVING QUEUED PROMISE', json);
+            resolve(json);
           });
           getPromiseQueue = [];
           return dispatch(action.GET.CONFIRM(id, json.result));
