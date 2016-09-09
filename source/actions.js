@@ -5,6 +5,8 @@ export const actionFactory = (stateName, t, api) => {
 
   const simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT']
 
+  const getPromiseQueue = []
+
   simpleActions.forEach(simpleAction => {
     action[simpleAction] = (id) => (
       { type: t[simpleAction], id }
@@ -134,11 +136,23 @@ export const actionFactory = (stateName, t, api) => {
           GET: { requested: false },
         }
         // If we already have an on-going request just wait for it to finish
-        if (requested) return
+        if (requested) {
+          const queuePromise = new Promise((resolve) => {
+            getPromiseQueue.push(resolve)
+          })
+          queuePromise.then((result) => action.GET.CONFIRM(id, result))
+          return
+        }
 
         dispatch(action.GET.REQUEST(id))
         return api.GET(id)
-          .then(json => dispatch(action.GET.CONFIRM(id, json.result)))
+          .then(json => {
+            getPromiseQueue.forEach(resolve => {
+              console.log("ILUVU OMG RESOLVING QUEUED PROMISE")
+              resolve(json.result)
+            })
+            dispatch(action.GET.CONFIRM(id, json.result))
+          })
           .catch(e => dispatch(action.GET.FAIL(id, e)))
       }
     ),

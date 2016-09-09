@@ -16,6 +16,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 
   var simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT'];
 
+  var getPromiseQueue = [];
+
   simpleActions.forEach(function (simpleAction) {
     action[simpleAction] = function (id) {
       return { type: t[simpleAction], id: id };
@@ -153,11 +155,23 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         var requested = _ref.GET.requested;
         // If we already have an on-going request just wait for it to finish
 
-        if (requested) return;
+        if (requested) {
+          var queuePromise = new Promise(function (resolve) {
+            getPromiseQueue.push(resolve);
+          });
+          queuePromise.then(function (result) {
+            return action.GET.CONFIRM(id, result);
+          });
+          return;
+        }
 
         dispatch(action.GET.REQUEST(id));
         return api.GET(id).then(function (json) {
-          return dispatch(action.GET.CONFIRM(id, json.result));
+          getPromiseQueue.forEach(function (resolve) {
+            console.log("ILUVU OMG RESOLVING QUEUED PROMISE");
+            resolve(json.result);
+          });
+          dispatch(action.GET.CONFIRM(id, json.result));
         }).catch(function (e) {
           return dispatch(action.GET.FAIL(id, e));
         });
