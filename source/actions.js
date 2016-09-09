@@ -5,7 +5,7 @@ export const actionFactory = (stateName, t, api) => {
 
   const simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT']
 
-  const getPromiseQueue = []
+  let getPromiseQueue = []
 
   simpleActions.forEach(simpleAction => {
     action[simpleAction] = (id) => (
@@ -140,7 +140,7 @@ export const actionFactory = (stateName, t, api) => {
           const queuePromise = new Promise((resolve) => {
             getPromiseQueue.push(resolve)
           })
-          queuePromise.then((result) => action.GET.CONFIRM(id, result))
+          queuePromise.then((result) => dispatch(action.GET.CONFIRM(id, result)))
           return queuePromise
         }
 
@@ -151,6 +151,7 @@ export const actionFactory = (stateName, t, api) => {
               console.log("ILUVU OMG RESOLVING QUEUED PROMISE")
               resolve(json.result)
             })
+            getPromiseQueue = []
             dispatch(action.GET.CONFIRM(id, json.result))
           })
           .catch(e => dispatch(action.GET.FAIL(id, e)))

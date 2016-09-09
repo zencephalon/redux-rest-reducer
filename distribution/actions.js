@@ -160,7 +160,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
             getPromiseQueue.push(resolve);
           });
           queuePromise.then(function (result) {
-            return action.GET.CONFIRM(id, result);
+            return dispatch(action.GET.CONFIRM(id, result));
           });
           return queuePromise;
         }
@@ -171,6 +171,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
             console.log("ILUVU OMG RESOLVING QUEUED PROMISE");
             resolve(json.result);
           });
+          getPromiseQueue = [];
           dispatch(action.GET.CONFIRM(id, json.result));
         }).catch(function (e) {
           return dispatch(action.GET.FAIL(id, e));
