@@ -140,7 +140,7 @@ export const actionFactory = (stateName, t, api) => {
           const queuePromise = new Promise((resolve) => {
             getPromiseQueue.push(resolve)
           })
-          queuePromise.then((result) => action.GET.CONFIRM(id, result))
+          queuePromise.then((result) => dispatch(action.GET.CONFIRM(id, result)))
           return queuePromise
         }
 
