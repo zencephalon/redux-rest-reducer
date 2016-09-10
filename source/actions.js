@@ -140,11 +140,10 @@ export const actionFactory = (stateName, t, api) => {
           const queuePromise = new Promise(resolve => {
             getPromiseQueue.push(resolve)
           })
-          queuePromise.then(json => {
+          return queuePromise.then(json => {
             console.log('Resolving promise in queue', id, json)
             return dispatch(action.GET.CONFIRM(id, json.result))
           })
-          return queuePromise
         }
 
         dispatch(action.GET.REQUEST(id))
