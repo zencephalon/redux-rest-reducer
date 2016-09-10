@@ -159,11 +159,10 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
           var queuePromise = new Promise(function (resolve) {
             getPromiseQueue.push(resolve);
           });
-          queuePromise.then(function (json) {
+          return queuePromise.then(function (json) {
             console.log('Resolving promise in queue', id, json);
             return dispatch(action.GET.CONFIRM(id, json.result));
           });
-          return queuePromise;
         }
 
         dispatch(action.GET.REQUEST(id));
