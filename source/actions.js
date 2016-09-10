@@ -141,7 +141,6 @@ export const actionFactory = (stateName, t, api) => {
             getPromiseQueue.push(resolve)
           })
           return queuePromise.then(json => {
-            console.log('Resolving promise in queue', id, json)
             return dispatch(action.GET.CONFIRM(id, json.result))
           })
         }
@@ -150,7 +149,6 @@ export const actionFactory = (stateName, t, api) => {
         return api.GET(id)
           .then(json => {
             getPromiseQueue.forEach(resolve => {
-              console.log('ILUVU OMG RESOLVING QUEUED PROMISE', json)
               resolve(json)
             })
             getPromiseQueue = []
