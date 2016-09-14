@@ -238,6 +238,9 @@ export const actionFactory = (stateName, t, api) => {
         return dispatch(promise.PUT(id, { ...oldData, ...data }))
       }
     ),
+    CLEAR_ERRORS: () => ({
+      type: t.CLEAR_ERRORS,
+    }),
     action,
   }
 }

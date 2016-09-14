@@ -11,6 +11,8 @@ exports.reducerFactory = reducerFactory;
 
 var _lodash = require('lodash');
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var defaultPOSTState = exports.defaultPOSTState = {
   requested: false,
   confirmed: false,
@@ -69,7 +71,8 @@ var reducerDefaultState = exports.reducerDefaultState = {
     /*
     "id": { requested: true, failed: false, confirmed: false, data: {} }
     */
-  }
+  },
+  errors: []
 };
 
 var methodDefault = function methodDefault() {
@@ -152,7 +155,8 @@ function reducerFactory(t) {
         });
 
         return _extends({}, state, {
-          things: things
+          things: things,
+          errors: [].concat(_toConsumableArray(state.errors), [action.error])
         });
       case t.INDEX.REQUEST:
         collections = _extends({}, state.collections);
@@ -219,7 +223,10 @@ function reducerFactory(t) {
           confirmed: false
         };
 
-        return _extends({}, state, { collections: collections });
+        return _extends({}, state, {
+          collections: collections,
+          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+        });
       case t.DELETE.REQUEST:
         things = _extends({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
@@ -241,7 +248,10 @@ function reducerFactory(t) {
           }
         });
 
-        return _extends({}, state, { things: things });
+        return _extends({}, state, {
+          things: things,
+          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+        });
       case t.DELETE.CONFIRM:
         things = _extends({}, state.things);
         things[action.id] = _extends({}, things[action.id], {
@@ -293,7 +303,10 @@ function reducerFactory(t) {
           data: action.data
         };
 
-        return _extends({}, state, { POST: POST });
+        return _extends({}, state, {
+          POST: POST,
+          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+        });
       case t.PUT.REQUEST:
         things = _extends({}, state.things);
 
@@ -341,7 +354,14 @@ function reducerFactory(t) {
           }
         });
 
-        return _extends({}, state, { things: things });
+        return _extends({}, state, {
+          things: things,
+          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+        });
+      case t.CLEAR_ERRORS:
+        return _extends({}, state, {
+          errors: []
+        });
       default:
         return state;
     }

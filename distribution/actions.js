@@ -279,6 +279,11 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return dispatch(promise.PUT(id, _extends({}, oldData, data)));
       };
     },
+    CLEAR_ERRORS: function CLEAR_ERRORS() {
+      return {
+        type: t.CLEAR_ERRORS
+      };
+    },
     action: action
   };
 };

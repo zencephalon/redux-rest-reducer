@@ -59,6 +59,7 @@ export const reducerDefaultState = {
     "id": { requested: true, failed: false, confirmed: false, data: {} }
     */
   },
+  errors: [],
 }
 
 const methodDefault = () => (
@@ -143,6 +144,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           things,
+          errors: [...state.errors, action.error],
         }
       case t.INDEX.REQUEST:
         collections = { ...state.collections }
@@ -187,7 +189,11 @@ export function reducerFactory(t) {
           confirmed: false,
         }
 
-        return { ...state, collections }
+        return {
+          ...state,
+          collections,
+          errors: [...state.errors, action.error],
+        }
       case t.DELETE.REQUEST:
         things = { ...state.things }
         things[action.id] = {
@@ -211,7 +217,11 @@ export function reducerFactory(t) {
           },
         }
 
-        return { ...state, things }
+        return {
+          ...state,
+          things,
+          errors: [...state.errors, action.error],
+        }
       case t.DELETE.CONFIRM:
         things = { ...state.things }
         things[action.id] = {
@@ -265,7 +275,11 @@ export function reducerFactory(t) {
           data: action.data,
         }
 
-        return { ...state, POST }
+        return {
+          ...state,
+          POST,
+          errors: [...state.errors, action.error],
+        }
       case t.PUT.REQUEST:
         things = { ...state.things }
 
@@ -317,7 +331,16 @@ export function reducerFactory(t) {
           },
         }
 
-        return { ...state, things }
+        return {
+          ...state,
+          things,
+          errors: [...state.errors, action.error],
+        }
+      case t.CLEAR_ERRORS:
+        return {
+          ...state,
+          errors: [],
+        }
       default:
         return state
     }

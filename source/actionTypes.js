@@ -5,6 +5,7 @@ const actionTypes = (name) => {
     'UNSELECT',
     'SET_SELECT',
     'SET_ADD_ANOTHER',
+    'CLEAR_ERRORS',
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {
