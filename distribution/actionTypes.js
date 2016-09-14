@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var actionTypes = function actionTypes(name) {
-  var actionTypes = ['INVALIDATE', 'SELECT', 'UNSELECT', 'SET_SELECT', 'SET_ADD_ANOTHER', 'CLEAR_ERRORS'];
+  var actionTypes = ['INVALIDATE', 'SELECT', 'UNSELECT', 'SET_SELECT', 'SET_ADD_ANOTHER'];
   var exportTypes = {};
   actionTypes.forEach(function (key) {
     exportTypes[key] = 'NEO/' + name + '/' + key;

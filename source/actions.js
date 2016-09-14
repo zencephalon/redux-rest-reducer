@@ -109,7 +109,10 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
           .then(json => dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder)))
-          .catch(e => dispatch(action.INDEX.FAIL(id, e)))
+          .catch(e => {
+            dispatch(action.INDEX.FAIL(id, e))
+            dispatch({ type: 'ERROR', e })
+          })
       }
     ),
     INDEX_BY_PARAMS: (params, sortOrder) => (
@@ -117,7 +120,10 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
           .then(json => dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder)))
-          .catch(e => dispatch(action.INDEX.FAIL(params, e)))
+          .catch(e => {
+            dispatch(action.INDEX.FAIL(params, e))
+            dispatch({ type: 'ERROR', e })
+          })
       }
     ),
     DELETE: (id) => (
@@ -125,7 +131,10 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.DELETE.REQUEST(id))
         return api.DELETE(id)
           .then(() => dispatch(action.DELETE.CONFIRM(id)))
-          .catch(e => dispatch(action.DELETE.FAIL(id, e)))
+          .catch(e => {
+            dispatch(action.DELETE.FAIL(id, e))
+            dispatch({ type: 'ERROR', e })
+          })
       }
     ),
     GET: (id) => (
@@ -154,7 +163,10 @@ export const actionFactory = (stateName, t, api) => {
             getPromiseQueue = []
             return dispatch(action.GET.CONFIRM(id, json.result))
           })
-          .catch(e => dispatch(action.GET.FAIL(id, e)))
+          .catch(e => {
+            dispatch(action.GET.FAIL(id, e))
+            dispatch({ type: 'ERROR', e })
+          })
       }
     ),
     POST: (id, data) => (
@@ -162,7 +174,10 @@ export const actionFactory = (stateName, t, api) => {
         dispatch(action.POST.REQUEST(id, data))
         return api.POST(data)
           .then(json => dispatch(action.POST.CONFIRM(id, json.result)))
-          .catch(e => dispatch(action.POST.FAIL(id, data, e)))
+          .catch(e => {
+            dispatch(action.POST.FAIL(id, data, e))
+            dispatch({ type: 'ERROR', e })
+          })
       }
     ),
     PUT: (id, data) => (
@@ -172,6 +187,7 @@ export const actionFactory = (stateName, t, api) => {
           .then(() => dispatch(action.PUT.CONFIRM(id, data)))
           .catch(e => {
             dispatch(action.PUT.FAIL(id, data, e))
+            dispatch({ type: 'ERROR', e })
           })
       }
     ),

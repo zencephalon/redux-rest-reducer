@@ -122,7 +122,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.INDEX(id).then(function (json) {
           return dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder));
         }).catch(function (e) {
-          return dispatch(action.INDEX.FAIL(id, e));
+          dispatch(action.INDEX.FAIL(id, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     },
@@ -132,7 +133,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.INDEX_BY_PARAMS(params).then(function (json) {
           return dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder));
         }).catch(function (e) {
-          return dispatch(action.INDEX.FAIL(params, e));
+          dispatch(action.INDEX.FAIL(params, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     },
@@ -142,7 +144,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.DELETE(id).then(function () {
           return dispatch(action.DELETE.CONFIRM(id));
         }).catch(function (e) {
-          return dispatch(action.DELETE.FAIL(id, e));
+          dispatch(action.DELETE.FAIL(id, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     },
@@ -172,7 +175,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
           getPromiseQueue = [];
           return dispatch(action.GET.CONFIRM(id, json.result));
         }).catch(function (e) {
-          return dispatch(action.GET.FAIL(id, e));
+          dispatch(action.GET.FAIL(id, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     },
@@ -182,7 +186,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         return api.POST(data).then(function (json) {
           return dispatch(action.POST.CONFIRM(id, json.result));
         }).catch(function (e) {
-          return dispatch(action.POST.FAIL(id, data, e));
+          dispatch(action.POST.FAIL(id, data, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     },
@@ -193,6 +198,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
           return dispatch(action.PUT.CONFIRM(id, data));
         }).catch(function (e) {
           dispatch(action.PUT.FAIL(id, data, e));
+          dispatch({ type: 'ERROR', e: e });
         });
       };
     }
