@@ -160,7 +160,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
             getPromiseQueue.push(resolve);
           });
           return queuePromise.then(function (json) {
-            return dispatch(action.GET.CONFIRM(id, json.result));
+            return action.GET.CONFIRM(id, json.result);
           });
         }
 

@@ -44,7 +44,7 @@ function configureAPI(API_URL) {
         if (r.status === 401) {
           localStorage.removeItem('jwt_token');
         }
-        throw Error(r.statusText);
+        throw Error(r);
       }
       var newToken = r.headers.get('X-AUTH-TOKEN');
       // ILUVU: Check whether we got back a new token in the headers.
