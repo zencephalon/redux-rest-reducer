@@ -156,7 +156,7 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           things: things,
-          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+          errors: [action.error].concat(_toConsumableArray(state.errors))
         });
       case t.INDEX.REQUEST:
         collections = _extends({}, state.collections);
@@ -225,7 +225,7 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           collections: collections,
-          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+          errors: [action.error].concat(_toConsumableArray(state.errors))
         });
       case t.DELETE.REQUEST:
         things = _extends({}, state.things);
@@ -250,7 +250,7 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           things: things,
-          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+          errors: [action.error].concat(_toConsumableArray(state.errors))
         });
       case t.DELETE.CONFIRM:
         things = _extends({}, state.things);
@@ -305,7 +305,7 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           POST: POST,
-          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+          errors: [action.error].concat(_toConsumableArray(state.errors))
         });
       case t.PUT.REQUEST:
         things = _extends({}, state.things);
@@ -356,7 +356,7 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           things: things,
-          errors: [].concat(_toConsumableArray(state.errors), [action.error])
+          errors: [action.error].concat(_toConsumableArray(state.errors))
         });
       case t.CLEAR_ERRORS:
         return _extends({}, state, {

@@ -144,7 +144,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           things,
-          errors: [...state.errors, action.error],
+          errors: [action.error, ...state.errors],
         }
       case t.INDEX.REQUEST:
         collections = { ...state.collections }
@@ -192,7 +192,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           collections,
-          errors: [...state.errors, action.error],
+          errors: [action.error, ...state.errors],
         }
       case t.DELETE.REQUEST:
         things = { ...state.things }
@@ -220,7 +220,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           things,
-          errors: [...state.errors, action.error],
+          errors: [action.error, ...state.errors],
         }
       case t.DELETE.CONFIRM:
         things = { ...state.things }
@@ -278,7 +278,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           POST,
-          errors: [...state.errors, action.error],
+          errors: [action.error, ...state.errors],
         }
       case t.PUT.REQUEST:
         things = { ...state.things }
@@ -334,7 +334,7 @@ export function reducerFactory(t) {
         return {
           ...state,
           things,
-          errors: [...state.errors, action.error],
+          errors: [action.error, ...state.errors],
         }
       case t.CLEAR_ERRORS:
         return {
