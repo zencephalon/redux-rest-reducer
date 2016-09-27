@@ -189,6 +189,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.POST.FAIL(id, data, e));
           dispatch({ type: 'ERROR', e: e });
+          throw new Error('POST FAILED');
         });
       };
     },
@@ -200,6 +201,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.PUT.FAIL(id, data, e));
           dispatch({ type: 'ERROR', e: e });
+          throw new Error('PUT FAILED');
         });
       };
     }

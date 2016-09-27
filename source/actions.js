@@ -178,6 +178,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.POST.FAIL(id, data, e))
             dispatch({ type: 'ERROR', e })
+            throw new Error('POST FAILED')
           })
       }
     ),
@@ -189,6 +190,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.PUT.FAIL(id, data, e))
             dispatch({ type: 'ERROR', e })
+            throw new Error('PUT FAILED')
           })
       }
     ),
