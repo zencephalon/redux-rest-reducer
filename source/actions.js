@@ -112,6 +112,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.INDEX.FAIL(id, e))
             dispatch({ type: 'ERROR', e })
+            throw e
           })
       }
     ),
@@ -123,6 +124,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.INDEX.FAIL(params, e))
             dispatch({ type: 'ERROR', e })
+            throw e
           })
       }
     ),
@@ -134,6 +136,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.DELETE.FAIL(id, e))
             dispatch({ type: 'ERROR', e })
+            throw e
           })
       }
     ),
@@ -166,7 +169,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.GET.FAIL(id, e))
             dispatch({ type: 'ERROR', e })
-            throw new Error('GET FAILED')
+            throw e
           })
       }
     ),
@@ -178,7 +181,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.POST.FAIL(id, data, e))
             dispatch({ type: 'ERROR', e })
-            throw new Error('POST FAILED')
+            throw e
           })
       }
     ),
@@ -190,7 +193,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.PUT.FAIL(id, data, e))
             dispatch({ type: 'ERROR', e })
-            throw new Error('PUT FAILED')
+            throw e
           })
       }
     ),
