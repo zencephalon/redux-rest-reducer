@@ -177,6 +177,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.GET.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
+          throw new Error('GET FAILED');
         });
       };
     },

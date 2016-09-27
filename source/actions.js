@@ -166,6 +166,7 @@ export const actionFactory = (stateName, t, api) => {
           .catch(e => {
             dispatch(action.GET.FAIL(id, e))
             dispatch({ type: 'ERROR', e })
+            throw new Error('GET FAILED')
           })
       }
     ),
