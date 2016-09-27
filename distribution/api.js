@@ -44,7 +44,6 @@ function configureAPI(API_URL) {
         if (r.status === 401) {
           localStorage.removeItem('jwt_token');
         }
-        throw Error(r.status);
       }
       var newToken = r.headers.get('X-AUTH-TOKEN');
       // ILUVU: Check whether we got back a new token in the headers.
@@ -66,7 +65,14 @@ function configureAPI(API_URL) {
         // Always replace the token in the all_properties map
         localStorage.setItem('all_properties', JSON.stringify(_extends({}, allProperties, _defineProperty({}, requestProperty, newToken))));
       }
-      return json ? r.json() : r;
+      return json ? r.json().then(function (json) {
+        if (!r.ok) {
+          var e = new Error(r.status);
+          e.json = json;
+          throw e;
+        }
+        return json;
+      }) : r;
     });
   }
 

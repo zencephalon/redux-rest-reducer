@@ -21,7 +21,6 @@ export default function configureAPI(API_URL) {
         if (r.status === 401) {
           localStorage.removeItem('jwt_token')
         }
-        throw Error(r.status)
       }
       const newToken = r.headers.get('X-AUTH-TOKEN')
       // ILUVU: Check whether we got back a new token in the headers.
@@ -46,7 +45,14 @@ export default function configureAPI(API_URL) {
           [requestProperty]: newToken,
         }))
       }
-      return json ? r.json() : r
+      return json ? r.json().then(json => {
+        if (!r.ok) {
+          const e = new Error(r.status)
+          e.json = json
+          throw e
+        }
+        return json
+      }) : r
     })
   }
 

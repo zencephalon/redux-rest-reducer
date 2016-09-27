@@ -124,6 +124,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     },
@@ -135,6 +136,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(params, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     },
@@ -146,6 +148,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.DELETE.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     },
@@ -177,6 +180,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.GET.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     },
@@ -188,6 +192,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.POST.FAIL(id, data, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     },
@@ -199,6 +204,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         }).catch(function (e) {
           dispatch(action.PUT.FAIL(id, data, e));
           dispatch({ type: 'ERROR', e: e });
+          throw e;
         });
       };
     }
