@@ -276,14 +276,15 @@ export const actionFactory = (stateName, t, api) => {
       data,
     }),
     UPDATE: (id, data) => ({
-      type: t.UPDATE,
+      type: t.PUT.CONFIRM,
       id,
       data,
+      receivedAt: Date.now(),
     }),
-    REMOVE: (id, data) => ({
-      type: t.REMOVE,
+    REMOVE: (id) => ({
+      type: t.DELETE.CONFIRM,
       id,
-      data,
+      receivedAt: Date.now(),
     }),
   }
 }

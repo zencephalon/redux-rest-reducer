@@ -11,6 +11,8 @@ exports.reducerFactory = reducerFactory;
 
 var _lodash = require('lodash');
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var defaultPOSTState = exports.defaultPOSTState = {
   requested: false,
   confirmed: false,
@@ -60,7 +62,8 @@ var reducerDefaultState = exports.reducerDefaultState = {
       data: [],
       requested: true,
       failed: false,
-      confirmed: false
+      confirmed: false,
+      subscribeFilter: null,
     }
     */
   },
@@ -206,7 +209,8 @@ function reducerFactory(t) {
           data: action.data,
           requested: false,
           failed: false,
-          confirmed: true
+          confirmed: true,
+          subscribeFilter: action.subscribeFilter
         };
 
         return _extends({}, state, { collections: collections, things: things });
@@ -349,6 +353,18 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           things: things
+        });
+      // Real time actions
+      case t.INSERT:
+        collections = _extends({}, state.collections);
+        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
+          return collection.subscribeFilter && collection.subscribeFilter(action.data) ? _extends({}, collection, {
+            data: [action.data].concat(_toConsumableArray(collection.data))
+          }) : collection;
+        });
+
+        return _extends({}, state, {
+          collections: collections
         });
       default:
         return state;

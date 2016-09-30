@@ -313,16 +313,17 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     UPDATE: function UPDATE(id, data) {
       return {
-        type: t.UPDATE,
+        type: t.PUT.CONFIRM,
         id: id,
-        data: data
+        data: data,
+        receivedAt: Date.now()
       };
     },
-    REMOVE: function REMOVE(id, data) {
+    REMOVE: function REMOVE(id) {
       return {
-        type: t.REMOVE,
+        type: t.DELETE.CONFIRM,
         id: id,
-        data: data
+        receivedAt: Date.now()
       };
     }
   };
