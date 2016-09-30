@@ -270,6 +270,21 @@ export const actionFactory = (stateName, t, api) => {
       type: t.CLEAR_ERRORS,
     }),
     action,
+    INSERT: (id, data) => ({
+      type: t.INSERT,
+      id,
+      data,
+    }),
+    UPDATE: (id, data) => ({
+      type: t.UPDATE,
+      id,
+      data,
+    }),
+    REMOVE: (id, data) => ({
+      type: t.REMOVE,
+      id,
+      data,
+    }),
   }
 }
 

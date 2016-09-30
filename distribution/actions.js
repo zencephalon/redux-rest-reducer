@@ -303,7 +303,28 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         type: t.CLEAR_ERRORS
       };
     },
-    action: action
+    action: action,
+    INSERT: function INSERT(id, data) {
+      return {
+        type: t.INSERT,
+        id: id,
+        data: data
+      };
+    },
+    UPDATE: function UPDATE(id, data) {
+      return {
+        type: t.UPDATE,
+        id: id,
+        data: data
+      };
+    },
+    REMOVE: function REMOVE(id, data) {
+      return {
+        type: t.REMOVE,
+        id: id,
+        data: data
+      };
+    }
   };
 };
 

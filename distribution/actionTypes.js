@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 var actionTypes = function actionTypes(name) {
   var actionTypes = ['INVALIDATE', 'SELECT', 'UNSELECT', 'SET_SELECT', 'SET_ADD_ANOTHER',
   // Real time push actionTypes
-  'UPDATE', 'INSERT', 'DELETE'];
+  'UPDATE', 'INSERT', 'REMOVE'];
   var exportTypes = {};
   actionTypes.forEach(function (key) {
     exportTypes[key] = 'NEO/' + name + '/' + key;

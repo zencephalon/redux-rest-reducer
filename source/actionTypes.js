@@ -8,7 +8,7 @@ const actionTypes = (name) => {
     // Real time push actionTypes
     'UPDATE',
     'INSERT',
-    'DELETE',
+    'REMOVE',
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {
