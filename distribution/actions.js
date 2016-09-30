@@ -137,7 +137,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         });
       };
     },
-    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params, _ref3) {
+    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
+      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
       var sortOrder = _ref3.sortOrder;
       var subscribeFilter = _ref3.subscribeFilter;
       return function (dispatch) {

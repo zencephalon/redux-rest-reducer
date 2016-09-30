@@ -121,7 +121,7 @@ export const actionFactory = (stateName, t, api) => {
           })
       }
     ),
-    INDEX_BY_PARAMS: (params, { sortOrder, subscribeFilter }) => (
+    INDEX_BY_PARAMS: (params, { sortOrder, subscribeFilter } = {}) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
