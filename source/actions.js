@@ -93,7 +93,7 @@ export const actionFactory = (stateName, t, api) => {
     CONFIRM: (params, data, {
       sortOrder = ['orderInList', 'firstName', 'name', 'id'],
       subscribeFilter,
-    }) => (
+    } = {}) => (
       {
         params,
         subscribeFilter,
@@ -108,7 +108,7 @@ export const actionFactory = (stateName, t, api) => {
   }
 
   const promise = {
-    INDEX: (id, { sortOrder, subscribeFilter }) => (
+    INDEX: (id, { sortOrder, subscribeFilter } = {}) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)

@@ -101,7 +101,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     FAIL: function FAIL(params, error) {
       return { type: t.INDEX.FAIL, params: params, error: error };
     },
-    CONFIRM: function CONFIRM(params, data, _ref) {
+    CONFIRM: function CONFIRM(params, data) {
+      var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
       var _ref$sortOrder = _ref.sortOrder;
       var sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder;
       var subscribeFilter = _ref.subscribeFilter;
@@ -119,7 +121,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 
   var promise = {
-    INDEX: function INDEX(id, _ref2) {
+    INDEX: function INDEX(id) {
+      var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
       var sortOrder = _ref2.sortOrder;
       var subscribeFilter = _ref2.subscribeFilter;
       return function (dispatch) {
