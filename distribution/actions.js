@@ -102,9 +102,14 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return { type: t.INDEX.FAIL, params: params, error: error };
     },
     CONFIRM: function CONFIRM(params, data) {
-      var sortOrder = arguments.length <= 2 || arguments[2] === undefined ? ['orderInList', 'firstName', 'name', 'id'] : arguments[2];
+      var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      var _ref$sortOrder = _ref.sortOrder;
+      var sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder;
+      var subscribeFilter = _ref.subscribeFilter;
       return {
         params: params,
+        subscribeFilter: subscribeFilter,
         data: sortOrder ? (0, _lodash.sortBy)(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now()
@@ -116,11 +121,15 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
   };
 
   var promise = {
-    INDEX: function INDEX(id, sortOrder) {
+    INDEX: function INDEX(id) {
+      var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      var sortOrder = _ref2.sortOrder;
+      var subscribeFilter = _ref2.subscribeFilter;
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(id));
         return api.INDEX(id).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder));
+          return dispatch(action.INDEX.CONFIRM(id, json.result, { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
@@ -128,11 +137,15 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         });
       };
     },
-    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params, sortOrder) {
+    INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
+      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      var sortOrder = _ref3.sortOrder;
+      var subscribeFilter = _ref3.subscribeFilter;
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(params));
         return api.INDEX_BY_PARAMS(params).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder));
+          return dispatch(action.INDEX.CONFIRM(params, json.result, { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(params, e));
           dispatch({ type: 'ERROR', e: e });
@@ -154,11 +167,11 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     GET: function GET(id) {
       return function (dispatch, getState) {
-        var _ref = getState()[stateName].http.things[id] || {
+        var _ref4 = getState()[stateName].http.things[id] || {
           GET: { requested: false }
         };
 
-        var requested = _ref.GET.requested;
+        var requested = _ref4.GET.requested;
         // If we already have an on-going request just wait for it to finish
 
         if (requested) {
@@ -218,13 +231,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     INDEX_CACHE: function INDEX_CACHE(id) {
       return function (dispatch, getState) {
-        var _ref2 = getState()[stateName].http.collections[id] || {
+        var _ref5 = getState()[stateName].http.collections[id] || {
           data: null,
           confirmed: false
         };
 
-        var data = _ref2.data;
-        var confirmed = _ref2.confirmed;
+        var data = _ref5.data;
+        var confirmed = _ref5.confirmed;
 
 
         return dispatch(confirmed ? action.INDEX.CACHE_HIT(id, data) : promise.INDEX(id));
@@ -237,13 +250,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     INDEX_BY_PARAMS_CACHE: function INDEX_BY_PARAMS_CACHE(params) {
       return function (dispatch, getState) {
-        var _ref3 = getState()[stateName].http.collections[params] || {
+        var _ref6 = getState()[stateName].http.collections[params] || {
           data: null,
           confirmed: false
         };
 
-        var data = _ref3.data;
-        var confirmed = _ref3.confirmed;
+        var data = _ref6.data;
+        var confirmed = _ref6.confirmed;
 
 
         return dispatch(confirmed ? action.INDEX.CACHE_HIT(params, data) : promise.INDEX_BY_PARAMS(params));
@@ -263,13 +276,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         // Check cache before making request
 
-        var _ref4 = getState()[stateName].http.things[id] || {
+        var _ref7 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
         };
 
-        var data = _ref4.data;
-        var confirmed = _ref4.GET.confirmed;
+        var data = _ref7.data;
+        var confirmed = _ref7.GET.confirmed;
 
 
         return dispatch(confirmed ? action.GET.CACHE_HIT(id, data) : promise.GET(id));
@@ -282,11 +295,11 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     },
     PUT: function PUT(id, data) {
       return function (dispatch, getState) {
-        var _ref5 = getState()[stateName].http.things[id] || {
+        var _ref8 = getState()[stateName].http.things[id] || {
           data: {}
         };
 
-        var oldData = _ref5.data;
+        var oldData = _ref8.data;
 
         return dispatch(promise.PUT(id, _extends({}, oldData, data)));
       };
@@ -296,7 +309,29 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         type: t.CLEAR_ERRORS
       };
     },
-    action: action
+    action: action,
+    INSERT: function INSERT(id, data) {
+      return {
+        type: t.INSERT,
+        id: id,
+        data: data
+      };
+    },
+    UPDATE: function UPDATE(id, data) {
+      return {
+        type: t.PUT.CONFIRM,
+        id: id,
+        data: data,
+        receivedAt: Date.now()
+      };
+    },
+    REMOVE: function REMOVE(id) {
+      return {
+        type: t.DELETE.CONFIRM,
+        id: id,
+        receivedAt: Date.now()
+      };
+    }
   };
 };
 

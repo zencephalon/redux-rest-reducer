@@ -5,6 +5,10 @@ const actionTypes = (name) => {
     'UNSELECT',
     'SET_SELECT',
     'SET_ADD_ANOTHER',
+    // Real time push actionTypes
+    'UPDATE',
+    'INSERT',
+    'REMOVE',
   ]
   const exportTypes = {}
   actionTypes.forEach((key) => {

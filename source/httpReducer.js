@@ -49,7 +49,8 @@ export const reducerDefaultState = {
       data: [],
       requested: true,
       failed: false,
-      confirmed: false
+      confirmed: false,
+      subscribeFilter: null,
     }
     */
   },
@@ -175,6 +176,7 @@ export function reducerFactory(t) {
           requested: false,
           failed: false,
           confirmed: true,
+          subscribeFilter: action.subscribeFilter,
         }
 
         return { ...state, collections, things }
@@ -329,6 +331,24 @@ export function reducerFactory(t) {
         return {
           ...state,
           things,
+        }
+      // Real time actions
+      case t.INSERT:
+        collections = { ...state.collections }
+        collections = mapValues(state.collections, collection => (
+          collection.subscribeFilter &&
+          collection.subscribeFilter(action.data) ?
+          {
+            ...collection,
+            data: [action.data, ...collection.data],
+          }
+          :
+          collection
+        ))
+
+        return {
+          ...state,
+          collections,
         }
       default:
         return state

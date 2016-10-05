@@ -90,9 +90,13 @@ export const actionFactory = (stateName, t, api) => {
     FAIL: (params, error) => (
       { type: t.INDEX.FAIL, params, error }
     ),
-    CONFIRM: (params, data, sortOrder = ['orderInList', 'firstName', 'name', 'id']) => (
+    CONFIRM: (params, data, {
+      sortOrder = ['orderInList', 'firstName', 'name', 'id'],
+      subscribeFilter,
+    } = {}) => (
       {
         params,
+        subscribeFilter,
         data: sortOrder ? sortBy(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now(),
@@ -104,11 +108,12 @@ export const actionFactory = (stateName, t, api) => {
   }
 
   const promise = {
-    INDEX: (id, sortOrder) => (
+    INDEX: (id, { sortOrder, subscribeFilter } = {}) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
-          .then(json => dispatch(action.INDEX.CONFIRM(id, json.result, sortOrder)))
+          .then(json => dispatch(action.INDEX.CONFIRM(id, json.result,
+            { sortOrder, subscribeFilter })))
           .catch(e => {
             dispatch(action.INDEX.FAIL(id, e))
             dispatch({ type: 'ERROR', e })
@@ -116,11 +121,12 @@ export const actionFactory = (stateName, t, api) => {
           })
       }
     ),
-    INDEX_BY_PARAMS: (params, sortOrder) => (
+    INDEX_BY_PARAMS: (params, { sortOrder, subscribeFilter } = {}) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
-          .then(json => dispatch(action.INDEX.CONFIRM(params, json.result, sortOrder)))
+          .then(json => dispatch(action.INDEX.CONFIRM(params, json.result,
+            { sortOrder, subscribeFilter })))
           .catch(e => {
             dispatch(action.INDEX.FAIL(params, e))
             dispatch({ type: 'ERROR', e })
@@ -264,6 +270,22 @@ export const actionFactory = (stateName, t, api) => {
       type: t.CLEAR_ERRORS,
     }),
     action,
+    INSERT: (id, data) => ({
+      type: t.INSERT,
+      id,
+      data,
+    }),
+    UPDATE: (id, data) => ({
+      type: t.PUT.CONFIRM,
+      id,
+      data,
+      receivedAt: Date.now(),
+    }),
+    REMOVE: (id) => ({
+      type: t.DELETE.CONFIRM,
+      id,
+      receivedAt: Date.now(),
+    }),
   }
 }
 
