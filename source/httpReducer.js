@@ -176,7 +176,8 @@ export function reducerFactory(t) {
           requested: false,
           failed: false,
           confirmed: true,
-          subscribeFilter: action.subscribeFilter,
+          subscribeFilter: collections[action.params].subscribeFilter ||
+            action.subscribeFilter,
         }
 
         return { ...state, collections, things }
@@ -231,6 +232,7 @@ export function reducerFactory(t) {
           },
         }
 
+        // Remove the thing from any collections containing it
         collections = mapValues(state.collections, collection => (
           {
             ...collection,
@@ -305,12 +307,16 @@ export function reducerFactory(t) {
           },
         }
 
+        // Update the things inside of collections
         collections = mapValues(state.collections, collection => (
           {
             ...collection,
-            data: collection.data.map(thing => (
-              thing.id === action.id ? action.data : thing
-            )),
+            data: collection.data.map(thing =>
+              (thing.id === action.id ? action.data : thing)
+            ).filter(thing =>
+              // Remove things that don't match the subscribe filter anymore
+              !collection.subscribeFilter || collection.subscribeFilter(thing)
+            ),
           }
         ))
 

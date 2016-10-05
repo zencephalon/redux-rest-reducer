@@ -210,7 +210,7 @@ function reducerFactory(t) {
           requested: false,
           failed: false,
           confirmed: true,
-          subscribeFilter: action.subscribeFilter
+          subscribeFilter: collections[action.params].subscribeFilter || action.subscribeFilter
         };
 
         return _extends({}, state, { collections: collections, things: things });
@@ -260,6 +260,7 @@ function reducerFactory(t) {
           }
         });
 
+        // Remove the thing from any collections containing it
         collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return _extends({}, collection, {
             data: collection.data.filter(function (thing) {
@@ -330,10 +331,16 @@ function reducerFactory(t) {
           }
         });
 
+        // Update the things inside of collections
         collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return _extends({}, collection, {
             data: collection.data.map(function (thing) {
               return thing.id === action.id ? action.data : thing;
+            }).filter(function (thing) {
+              return(
+                // Remove things that don't match the subscribe filter anymore
+                !collection.subscribeFilter || collection.subscribeFilter(thing)
+              );
             })
           });
         });
