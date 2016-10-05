@@ -107,6 +107,9 @@ export default function configureAPI(API_URL) {
       PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
         body: JSON.stringify({ ...template, ...item }),
       }),
+      REORDER: ids => putToAPI(`${endpoint}/order`, {
+        body: JSON.stringify(ids),
+      }),
     }
   }
 

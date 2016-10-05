@@ -144,6 +144,11 @@ function configureAPI(API_URL) {
         return putToAPI(endpoint + '/' + id, {
           body: JSON.stringify(_extends({}, template, item))
         });
+      },
+      REORDER: function REORDER(ids) {
+        return putToAPI(endpoint + '/order', {
+          body: JSON.stringify(ids)
+        });
       }
     };
   }
