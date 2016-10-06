@@ -210,7 +210,7 @@ function reducerFactory(t) {
           requested: false,
           failed: false,
           confirmed: true,
-          subscribeFilter: collections[action.params].subscribeFilter || action.subscribeFilter
+          subscribeFilter: (collections[action.params] ? collections[action.params].subscribeFilter : null) || action.subscribeFilter
         };
 
         return _extends({}, state, { collections: collections, things: things });

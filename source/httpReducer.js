@@ -176,7 +176,13 @@ export function reducerFactory(t) {
           requested: false,
           failed: false,
           confirmed: true,
-          subscribeFilter: collections[action.params].subscribeFilter ||
+          subscribeFilter:
+            (collections[action.params] ?
+              collections[action.params].subscribeFilter
+              :
+              null
+            )
+            ||
             action.subscribeFilter,
         }
 
