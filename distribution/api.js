@@ -39,12 +39,6 @@ function configureAPI(API_URL) {
     return fetch(API_URL + endpoint, Object.assign({
       headers: headers
     }, options)).then(function (r) {
-      if (!r.ok) {
-        // ILUVU: 401 means we used an expired token and we should logout
-        if (r.status === 401) {
-          localStorage.removeItem('jwt_token');
-        }
-      }
       var newToken = r.headers.get('X-AUTH-TOKEN');
       // ILUVU: Check whether we got back a new token in the headers.
       // We will if our token will expire soon, and we should replace it.
@@ -64,6 +58,12 @@ function configureAPI(API_URL) {
         }
         // Always replace the token in the all_properties map
         localStorage.setItem('all_properties', JSON.stringify(_extends({}, allProperties, _defineProperty({}, requestProperty, newToken))));
+      }
+      if (!r.ok) {
+        // ILUVU: 401 means we used an expired token and we should logout
+        if (r.status === 401) {
+          localStorage.removeItem('jwt_token');
+        }
       }
       return json ? r.json().then(function (json) {
         if (!r.ok) {
