@@ -102,7 +102,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return { type: t.INDEX.FAIL, params: params, error: error };
     },
     CONFIRM: function CONFIRM(params, data) {
-      var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+      var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
       var _ref$sortOrder = _ref.sortOrder;
       var sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder;
@@ -122,7 +122,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 
   var promise = {
     INDEX: function INDEX(id) {
-      var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       var sortOrder = _ref2.sortOrder;
       var subscribeFilter = _ref2.subscribeFilter;
@@ -138,7 +138,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       };
     },
     INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
-      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       var sortOrder = _ref3.sortOrder;
       var subscribeFilter = _ref3.subscribeFilter;
@@ -275,7 +275,6 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     GET_CACHE: function GET_CACHE(id) {
       return function (dispatch, getState) {
         // Check cache before making request
-
         var _ref7 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
@@ -338,7 +337,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam, postImage) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         return postImage(image, type).then(function (j) {
           return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
@@ -346,7 +345,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         return postImage(image, type).then(function (j) {
           var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
@@ -357,7 +356,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
   };
   return {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request
@@ -366,7 +365,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request
