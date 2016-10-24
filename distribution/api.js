@@ -16,7 +16,7 @@ var CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json';
 
 function configureAPI(API_URL) {
   function fetchFromAPI(endpoint) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$options = _ref.options;
     var options = _ref$options === undefined ? {} : _ref$options;
@@ -67,22 +67,21 @@ function configureAPI(API_URL) {
         var e = new Error(r.status);
         e.json = json;
         throw e;
-        return;
       }
-      return json ? r.json().then(function (json) {
-        return json;
+      return json ? r.json().then(function (jsonVal) {
+        return jsonVal;
       }) : r;
     });
   }
 
   function postToAPI(endpoint) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     return fetchFromAPI(endpoint, { options: Object.assign({ method: 'post' }, options) });
   }
 
   function postMultipartToAPI(endpoint) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     var image = arguments[2];
 
     return fetchFromAPI(endpoint, {
@@ -94,7 +93,7 @@ function configureAPI(API_URL) {
   }
 
   function putToAPI(endpoint) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     return fetchFromAPI(endpoint, {
       options: Object.assign({ method: 'put' }, options),
@@ -103,7 +102,7 @@ function configureAPI(API_URL) {
   }
 
   function deleteFromAPI(endpoint) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     return fetchFromAPI(endpoint, {
       options: Object.assign({ method: 'delete' }, options),
@@ -112,7 +111,7 @@ function configureAPI(API_URL) {
   }
 
   function postImage(imageFormData) {
-    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'thumbnail';
+    var type = arguments.length <= 1 || arguments[1] === undefined ? 'thumbnail' : arguments[1];
 
     return postMultipartToAPI('image/?image-type=' + type, {
       body: imageFormData

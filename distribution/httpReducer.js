@@ -94,7 +94,7 @@ var thingDefault = function thingDefault() {
 
 function reducerFactory(t) {
   var reducer = function httpReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : reducerDefaultState;
+    var state = arguments.length <= 0 || arguments[0] === undefined ? reducerDefaultState : arguments[0];
     var action = arguments[1];
 
     var things = void 0;
@@ -337,7 +337,7 @@ function reducerFactory(t) {
             data: collection.data.map(function (thing) {
               return thing.id === action.id ? action.data : thing;
             }).filter(function (thing) {
-              return (
+              return(
                 // Remove things that don't match the subscribe filter anymore
                 !collection.subscribeFilter || collection.subscribeFilter(thing)
               );

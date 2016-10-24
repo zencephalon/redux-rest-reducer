@@ -40,18 +40,15 @@ export default function configureAPI(API_URL) {
         }))
       }
       if (!r.ok) {
-          // ILUVU: 401 means we used an expired token and we should logout
-          if (r.status === 401) {
-            localStorage.removeItem('jwt_token')
-          }
-          const e = new Error(r.status)
-          e.json = json
-          throw e
-          return
+        // ILUVU: 401 means we used an expired token and we should logout
+        if (r.status === 401) {
+          localStorage.removeItem('jwt_token')
+        }
+        const e = new Error(r.status)
+        e.json = json
+        throw e
       }
-      return json ? r.json().then(json => {
-        return json
-      }) : r
+      return json ? r.json().then(jsonVal => jsonVal) : r
     })
   }
 
