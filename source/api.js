@@ -1,4 +1,4 @@
-const CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json'
+const CONTENT_TYPE = 'application/json'
 
 export default function configureAPI(API_URL) {
   function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
@@ -76,7 +76,7 @@ export default function configureAPI(API_URL) {
       GET: (id) => fetchFromAPI(`${endpoint}/${id}`),
       DELETE: (id) => deleteFromAPI(`${endpoint}/${id}`),
       PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
-        body: JSON.stringify({ data: { ...template, ...item } }),
+        body: JSON.stringify({ ...template, ...item }),
       }),
     }
   }

@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports.default = configureAPI;
-var CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json';
+var CONTENT_TYPE = 'application/json';
 
 function configureAPI(API_URL) {
   function fetchFromAPI(endpoint) {
@@ -114,7 +114,7 @@ function configureAPI(API_URL) {
       },
       PUT: function PUT(id, item) {
         return putToAPI(endpoint + '/' + id, {
-          body: JSON.stringify({ data: _extends({}, template, item) })
+          body: JSON.stringify(_extends({}, template, item))
         });
       }
     };
