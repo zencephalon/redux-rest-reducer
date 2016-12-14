@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-lib",
+  "name": "redux-rest-reducer",
   "version": "1.2.2",
-  "description": "Action and reducer infrastructure around Redux",
+  "description": "Easily interface with REST APIs without boilerplate via Redux",
   "main": "distribution/index.js",
   "scripts": {
     "test": "babel source --presets babel-preset-es2015 --out-dir distribution; mocha",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Travelytix/js-redux-lib.git"
+    "url": "git+https://github.com/zencephalon/redux-rest-reducer.git"
   },
   "author": "Matthew Bunday (http://zencephalon.com/)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Travelytix/js-redux-lib/issues"
+    "url": "https://github.com/zencephalon/redux-rest-reducer/issues"
   },
-  "homepage": "https://github.com/Travelytix/js-redux-lib#readme",
+  "homepage": "https://github.com/zencephalon/redux-rest-reducer#readme",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.13.1"
