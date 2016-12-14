@@ -1,10 +1,5 @@
 const actionTypes = (name) => {
   const actionTypes = [
-    'INVALIDATE',
-    'SELECT',
-    'UNSELECT',
-    'SET_SELECT',
-    'SET_ADD_ANOTHER',
     // Real time push actionTypes
     'UPDATE',
     'INSERT',
@@ -21,7 +16,7 @@ const actionTypes = (name) => {
   requestTypes.forEach((type) => {
     const obj = {}
     statuses.forEach((status) => {
-      obj[status] = `NEO/${name}/${type}/${status}`
+      obj[status] = `HTTP/${name}/${type}/${status}`
     })
     exportTypes[type] = obj
   })

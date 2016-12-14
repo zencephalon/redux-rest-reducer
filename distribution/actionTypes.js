@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var actionTypes = function actionTypes(name) {
-  var actionTypes = ['INVALIDATE', 'SELECT', 'UNSELECT', 'SET_SELECT', 'SET_ADD_ANOTHER',
+  var actionTypes = [
   // Real time push actionTypes
   'UPDATE', 'INSERT', 'REMOVE'];
   var exportTypes = {};
@@ -18,7 +18,7 @@ var actionTypes = function actionTypes(name) {
   requestTypes.forEach(function (type) {
     var obj = {};
     statuses.forEach(function (status) {
-      obj[status] = 'NEO/' + name + '/' + type + '/' + status;
+      obj[status] = 'HTTP/' + name + '/' + type + '/' + status;
     });
     exportTypes[type] = obj;
   });

@@ -3,15 +3,7 @@ import { sortBy } from 'lodash'
 export const actionFactory = (stateName, t, api) => {
   const action = {}
 
-  const simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT']
-
   let getPromiseQueue = []
-
-  simpleActions.forEach(simpleAction => {
-    action[simpleAction] = (id) => (
-      { type: t[simpleAction], id }
-    )
-  })
 
   action.DELETE = {
     REQUEST: (id) => (

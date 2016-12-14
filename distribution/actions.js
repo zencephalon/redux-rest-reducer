@@ -14,15 +14,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var actionFactory = exports.actionFactory = function actionFactory(stateName, t, api) {
   var action = {};
 
-  var simpleActions = ['INVALIDATE', 'SELECT', 'UNSELECT'];
-
   var getPromiseQueue = [];
-
-  simpleActions.forEach(function (simpleAction) {
-    action[simpleAction] = function (id) {
-      return { type: t[simpleAction], id: id };
-    };
-  });
 
   action.DELETE = {
     REQUEST: function REQUEST(id) {
@@ -102,11 +94,11 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return { type: t.INDEX.FAIL, params: params, error: error };
     },
     CONFIRM: function CONFIRM(params, data) {
-      var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+      var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref$sortOrder = _ref.sortOrder,
+          sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder,
+          subscribeFilter = _ref.subscribeFilter;
 
-      var _ref$sortOrder = _ref.sortOrder;
-      var sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder;
-      var subscribeFilter = _ref.subscribeFilter;
       return {
         params: params,
         subscribeFilter: subscribeFilter,
@@ -122,10 +114,10 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 
   var promise = {
     INDEX: function INDEX(id) {
-      var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          sortOrder = _ref2.sortOrder,
+          subscribeFilter = _ref2.subscribeFilter;
 
-      var sortOrder = _ref2.sortOrder;
-      var subscribeFilter = _ref2.subscribeFilter;
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(id));
         return api.INDEX(id).then(function (json) {
@@ -138,10 +130,10 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       };
     },
     INDEX_BY_PARAMS: function INDEX_BY_PARAMS(params) {
-      var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          sortOrder = _ref3.sortOrder,
+          subscribeFilter = _ref3.subscribeFilter;
 
-      var sortOrder = _ref3.sortOrder;
-      var subscribeFilter = _ref3.subscribeFilter;
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(params));
         return api.INDEX_BY_PARAMS(params).then(function (json) {
@@ -169,10 +161,10 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         var _ref4 = getState()[stateName].http.things[id] || {
           GET: { requested: false }
-        };
-
-        var requested = _ref4.GET.requested;
+        },
+            requested = _ref4.GET.requested;
         // If we already have an on-going request just wait for it to finish
+
 
         if (requested) {
           var queuePromise = new Promise(function (resolve) {
@@ -234,11 +226,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         var _ref5 = getState()[stateName].http.collections[id] || {
           data: null,
           confirmed: false
-        };
-
-        var data = _ref5.data;
-        var confirmed = _ref5.confirmed;
-
+        },
+            data = _ref5.data,
+            confirmed = _ref5.confirmed;
 
         return dispatch(confirmed ? action.INDEX.CACHE_HIT(id, data) : promise.INDEX(id));
       };
@@ -253,11 +243,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         var _ref6 = getState()[stateName].http.collections[params] || {
           data: null,
           confirmed: false
-        };
-
-        var data = _ref6.data;
-        var confirmed = _ref6.confirmed;
-
+        },
+            data = _ref6.data,
+            confirmed = _ref6.confirmed;
 
         return dispatch(confirmed ? action.INDEX.CACHE_HIT(params, data) : promise.INDEX_BY_PARAMS(params));
       };
@@ -275,15 +263,12 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     GET_CACHE: function GET_CACHE(id) {
       return function (dispatch, getState) {
         // Check cache before making request
-
         var _ref7 = getState()[stateName].http.things[id] || {
           data: null,
           GET: { confirmed: false }
-        };
-
-        var data = _ref7.data;
-        var confirmed = _ref7.GET.confirmed;
-
+        },
+            data = _ref7.data,
+            confirmed = _ref7.GET.confirmed;
 
         return dispatch(confirmed ? action.GET.CACHE_HIT(id, data) : promise.GET(id));
       };
@@ -297,9 +282,8 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         var _ref8 = getState()[stateName].http.things[id] || {
           data: {}
-        };
-
-        var oldData = _ref8.data;
+        },
+            oldData = _ref8.data;
 
         return dispatch(promise.PUT(id, _extends({}, oldData, data)));
       };
@@ -338,7 +322,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
 var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam, postImage) {
   var promise = {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         return postImage(image, type).then(function (j) {
           return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
@@ -346,7 +330,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         return postImage(image, type).then(function (j) {
           var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
@@ -357,7 +341,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
   };
   return {
     POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request
@@ -366,7 +350,7 @@ var withImageActionFactory = exports.withImageActionFactory = function withImage
       };
     },
     PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length <= 3 || arguments[3] === undefined ? 'thumbnail' : arguments[3];
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
       return function (dispatch) {
         // Provides feedback to the form that we've started processing
         // the overall request

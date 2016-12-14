@@ -1,5 +1,3 @@
-import { find } from 'lodash'
-
 const CONTENT_TYPE = 'application/vnd.travelytix.guestfriend-1.0+json'
 
 export default function configureAPI(API_URL) {
@@ -16,29 +14,6 @@ export default function configureAPI(API_URL) {
     return fetch(API_URL + endpoint, Object.assign({
       headers,
     }, options)).then(r => {
-      const newToken = r.headers.get('X-AUTH-TOKEN')
-      // ILUVU: Check whether we got back a new token in the headers.
-      // We will if our token will expire soon, and we should replace it.
-      if (newToken) {
-        // Which property did we make the request for?
-        const requestProperty = r.headers.get('X-AUTH-HOTEL')
-        const allProperties = JSON.parse(localStorage.getItem('all_properties'))
-        // Find the token we used to make the request
-        const requestPropertyEntry = find(allProperties, {
-          propertyId: requestProperty,
-        })
-        const requestToken = requestPropertyEntry ? requestPropertyEntry.token : null
-
-        // Replace the current jwt_token if we used it to make this request
-        if (localStorage.getItem('jwt_token') === requestToken) {
-          localStorage.setItem('jwt_token', newToken)
-        }
-        // Always replace the token in the all_properties map
-        localStorage.setItem('all_properties', JSON.stringify({
-          ...allProperties,
-          [requestProperty]: newToken,
-        }))
-      }
       if (!r.ok) {
         // ILUVU: 401 means we used an expired token and we should logout
         if (r.status === 401) {
@@ -102,9 +77,6 @@ export default function configureAPI(API_URL) {
       DELETE: (id) => deleteFromAPI(`${endpoint}/${id}`),
       PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
         body: JSON.stringify({ ...template, ...item }),
-      }),
-      REORDER: ids => putToAPI(`${endpoint}/order`, {
-        body: JSON.stringify(ids),
       }),
     }
   }
