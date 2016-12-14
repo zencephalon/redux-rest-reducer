@@ -3,15 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.withImageActionFactory = exports.actionFactory = undefined;
+exports.actionFactory = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _lodash = require('lodash');
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var actionFactory = exports.actionFactory = function actionFactory(stateName, t, api) {
+  var resultFunc = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function (json) {
+    return json;
+  };
+
   var action = {};
 
   var getPromiseQueue = [];
@@ -121,7 +123,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(id));
         return api.INDEX(id).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(id, json.result, { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
+          return dispatch(action.INDEX.CONFIRM(id, resultFunc(json), { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
@@ -137,7 +139,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(params));
         return api.INDEX_BY_PARAMS(params).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(params, json.result, { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
+          return dispatch(action.INDEX.CONFIRM(params, resultFunc(json), { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(params, e));
           dispatch({ type: 'ERROR', e: e });
@@ -171,7 +173,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
             getPromiseQueue.push(resolve);
           });
           return queuePromise.then(function (json) {
-            return action.GET.CONFIRM(id, json.result);
+            return action.GET.CONFIRM(id, resultFunc(json));
           });
         }
 
@@ -181,7 +183,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
             resolve(json);
           });
           getPromiseQueue = [];
-          return dispatch(action.GET.CONFIRM(id, json.result));
+          return dispatch(action.GET.CONFIRM(id, resultFunc(json)));
         }).catch(function (e) {
           dispatch(action.GET.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
@@ -193,7 +195,7 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch) {
         dispatch(action.POST.REQUEST(id, data));
         return api.POST(data).then(function (json) {
-          return dispatch(action.POST.CONFIRM(id, json.result));
+          return dispatch(action.POST.CONFIRM(id, resultFunc(json)));
         }).catch(function (e) {
           dispatch(action.POST.FAIL(id, data, e));
           dispatch({ type: 'ERROR', e: e });
@@ -314,48 +316,6 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
         type: t.DELETE.CONFIRM,
         id: id,
         receivedAt: Date.now()
-      };
-    }
-  };
-};
-
-var withImageActionFactory = exports.withImageActionFactory = function withImageActionFactory(generic, imageParam, postImage) {
-  var promise = {
-    POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
-      return function (dispatch) {
-        return postImage(image, type).then(function (j) {
-          return dispatch(generic.POST(id, _extends({}, data, _defineProperty({}, imageParam, j.result))));
-        });
-      };
-    },
-    PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
-      return function (dispatch) {
-        return postImage(image, type).then(function (j) {
-          var output = _extends({}, data, _defineProperty({}, imageParam, j.result));
-          dispatch(generic.PUT(id, output));
-        });
-      };
-    }
-  };
-  return {
-    POST_WITH_IMG: function POST_WITH_IMG(id, data, image) {
-      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
-      return function (dispatch) {
-        // Provides feedback to the form that we've started processing
-        // the overall request
-        dispatch(generic.action.POST.REQUEST(id));
-        return dispatch(promise.POST_WITH_IMG(id, data, image, type));
-      };
-    },
-    PUT_WITH_IMG: function PUT_WITH_IMG(id, data, image) {
-      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'thumbnail';
-      return function (dispatch) {
-        // Provides feedback to the form that we've started processing
-        // the overall request
-        dispatch(generic.action.PUT.REQUEST(id));
-        return dispatch(promise.PUT_WITH_IMG(id, data, image, type));
       };
     }
   };

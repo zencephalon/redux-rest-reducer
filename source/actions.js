@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash'
 
-export const actionFactory = (stateName, t, api) => {
+export const actionFactory = (stateName, t, api, resultFunc = json => json) => {
   const action = {}
 
   let getPromiseQueue = []
@@ -104,7 +104,7 @@ export const actionFactory = (stateName, t, api) => {
       dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
-          .then(json => dispatch(action.INDEX.CONFIRM(id, json.result,
+          .then(json => dispatch(action.INDEX.CONFIRM(id, resultFunc(json),
             { sortOrder, subscribeFilter })))
           .catch(e => {
             dispatch(action.INDEX.FAIL(id, e))
@@ -117,7 +117,7 @@ export const actionFactory = (stateName, t, api) => {
       dispatch => {
         dispatch(action.INDEX.REQUEST(params))
         return api.INDEX_BY_PARAMS(params)
-          .then(json => dispatch(action.INDEX.CONFIRM(params, json.result,
+          .then(json => dispatch(action.INDEX.CONFIRM(params, resultFunc(json),
             { sortOrder, subscribeFilter })))
           .catch(e => {
             dispatch(action.INDEX.FAIL(params, e))
@@ -151,7 +151,7 @@ export const actionFactory = (stateName, t, api) => {
             getPromiseQueue.push(resolve)
           })
           return queuePromise.then(json =>
-            action.GET.CONFIRM(id, json.result)
+            action.GET.CONFIRM(id, resultFunc(json))
           )
         }
 
@@ -162,7 +162,7 @@ export const actionFactory = (stateName, t, api) => {
               resolve(json)
             })
             getPromiseQueue = []
-            return dispatch(action.GET.CONFIRM(id, json.result))
+            return dispatch(action.GET.CONFIRM(id, resultFunc(json)))
           })
           .catch(e => {
             dispatch(action.GET.FAIL(id, e))
@@ -175,7 +175,7 @@ export const actionFactory = (stateName, t, api) => {
       dispatch => {
         dispatch(action.POST.REQUEST(id, data))
         return api.POST(data)
-          .then(json => dispatch(action.POST.CONFIRM(id, json.result)))
+          .then(json => dispatch(action.POST.CONFIRM(id, resultFunc(json))))
           .catch(e => {
             dispatch(action.POST.FAIL(id, data, e))
             dispatch({ type: 'ERROR', e })
@@ -278,50 +278,5 @@ export const actionFactory = (stateName, t, api) => {
       id,
       receivedAt: Date.now(),
     }),
-  }
-}
-
-export const withImageActionFactory = (generic, imageParam, postImage) => {
-  const promise = {
-    POST_WITH_IMG: (id, data, image, type = 'thumbnail') => (
-      dispatch => (
-        postImage(image, type).then(j =>
-          dispatch(generic.POST(id, {
-            ...data,
-            [imageParam]: j.result,
-          }))
-        )
-      )
-    ),
-    PUT_WITH_IMG: (id, data, image, type = 'thumbnail') => (
-      dispatch => (
-        postImage(image, type).then(j => {
-          const output = {
-            ...data,
-            [imageParam]: j.result,
-          }
-          dispatch(generic.PUT(id, output))
-        }
-        )
-      )
-    ),
-  }
-  return {
-    POST_WITH_IMG: (id, data, image, type = 'thumbnail') => (
-      dispatch => {
-        // Provides feedback to the form that we've started processing
-        // the overall request
-        dispatch(generic.action.POST.REQUEST(id))
-        return dispatch(promise.POST_WITH_IMG(id, data, image, type))
-      }
-    ),
-    PUT_WITH_IMG: (id, data, image, type = 'thumbnail') => (
-      dispatch => {
-        // Provides feedback to the form that we've started processing
-        // the overall request
-        dispatch(generic.action.PUT.REQUEST(id))
-        return dispatch(promise.PUT_WITH_IMG(id, data, image, type))
-      }
-    ),
   }
 }
