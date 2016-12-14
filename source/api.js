@@ -76,7 +76,7 @@ export default function configureAPI(API_URL) {
       GET: (id) => fetchFromAPI(`${endpoint}/${id}`),
       DELETE: (id) => deleteFromAPI(`${endpoint}/${id}`),
       PUT: (id, item) => putToAPI(`${endpoint}/${id}`, {
-        body: JSON.stringify({ ...template, ...item }),
+        body: JSON.stringify({ data: { ...template, ...item } }),
       }),
     }
   }

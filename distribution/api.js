@@ -114,7 +114,7 @@ function configureAPI(API_URL) {
       },
       PUT: function PUT(id, item) {
         return putToAPI(endpoint + '/' + id, {
-          body: JSON.stringify(_extends({}, template, item))
+          body: JSON.stringify({ data: _extends({}, template, item) })
         });
       }
     };
