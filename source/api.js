@@ -2,23 +2,14 @@ const CONTENT_TYPE = 'application/json'
 
 export default function configureAPI(API_URL) {
   function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
-    const authToken = localStorage.getItem('jwt_token')
     const headers = {
       Accept: CONTENT_TYPE,
     }
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
-    // Send up our token
-    if (authToken && authToken !== 'null') {
-      headers['X-AUTH-TOKEN'] = authToken
-    }
     return fetch(API_URL + endpoint, Object.assign({
       headers,
     }, options)).then(r => {
       if (!r.ok) {
-        // ILUVU: 401 means we used an expired token and we should logout
-        if (r.status === 401) {
-          localStorage.removeItem('jwt_token')
-        }
         const e = new Error(r.status)
         e.json = json
         throw e
