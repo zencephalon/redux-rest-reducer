@@ -9,19 +9,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.default = configureAPI;
 var CONTENT_TYPE = 'application/json';
 
-function configureAPI(API_URL) {
-  function fetchFromAPI(endpoint) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-        _ref$options = _ref.options,
-        options = _ref$options === undefined ? {} : _ref$options,
-        _ref$image = _ref.image,
-        image = _ref$image === undefined ? false : _ref$image,
-        _ref$json = _ref.json,
-        json = _ref$json === undefined ? true : _ref$json;
+function configureAPI(API_URL, _ref) {
+  var _ref$headerFunc = _ref.headerFunc,
+      headerFunc = _ref$headerFunc === undefined ? function (h) {
+    return h;
+  } : _ref$headerFunc,
+      _ref$errorFunc = _ref.errorFunc,
+      errorFunc = _ref$errorFunc === undefined ? function () {} : _ref$errorFunc;
 
-    var headers = {
+  function fetchFromAPI(endpoint) {
+    var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref2$options = _ref2.options,
+        options = _ref2$options === undefined ? {} : _ref2$options,
+        _ref2$image = _ref2.image,
+        image = _ref2$image === undefined ? false : _ref2$image,
+        _ref2$json = _ref2.json,
+        json = _ref2$json === undefined ? true : _ref2$json;
+
+    var headers = headerFunc({
       Accept: CONTENT_TYPE
-    };
+    });
     if (!image) {
       headers['Content-Type'] = CONTENT_TYPE;
     }
@@ -31,6 +38,7 @@ function configureAPI(API_URL) {
       if (!r.ok) {
         var e = new Error(r.status);
         e.json = json;
+        errorFunc(e);
         throw e;
       }
       return json ? r.json().then(function (jsonVal) {

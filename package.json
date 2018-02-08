@@ -1,6 +1,6 @@
 {
   "name": "redux-rest-reducer",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Easily interface with REST APIs without boilerplate via Redux",
   "main": "distribution/index.js",
   "scripts": {

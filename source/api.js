@@ -1,10 +1,10 @@
 const CONTENT_TYPE = 'application/json'
 
-export default function configureAPI(API_URL) {
+export default function configureAPI(API_URL, { headerFunc = (h) => h, errorFunc = () => {} }) {
   function fetchFromAPI(endpoint, { options = {}, image = false, json = true } = {}) {
-    const headers = {
+    const headers = headerFunc({
       Accept: CONTENT_TYPE,
-    }
+    })
     if (!image) { headers['Content-Type'] = CONTENT_TYPE }
     return fetch(API_URL + endpoint, Object.assign({
       headers,
@@ -12,6 +12,7 @@ export default function configureAPI(API_URL) {
       if (!r.ok) {
         const e = new Error(r.status)
         e.json = json
+        errorFunc(e)
         throw e
       }
       return json ? r.json().then(jsonVal => jsonVal) : r
