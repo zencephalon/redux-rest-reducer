@@ -171,36 +171,38 @@ function reducerFactory(t) {
         collections = _extends({}, state.collections);
         things = _extends({}, state.things);
 
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
+        if (action.shouldUpdateThings) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
 
-        try {
-          for (var _iterator = action.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var datum = _step.value;
-
-            if (!things[datum.id]) {
-              things[datum.id] = thingDefault();
-            }
-            things[datum.id].data = datum;
-
-            // should we do this? maybe not...
-            if (!things[datum.id].GET) {
-              things[datum.id].GET = methodDefault();
-            }
-            things[datum.id].GET.confirmed = true;
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            for (var _iterator = action.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var datum = _step.value;
+
+              if (!things[datum.id]) {
+                things[datum.id] = thingDefault();
+              }
+              things[datum.id].data = datum;
+
+              // should we do this? maybe not...
+              if (!things[datum.id].GET) {
+                things[datum.id].GET = methodDefault();
+              }
+              things[datum.id].GET.confirmed = true;
             }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
           } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
             }
           }
         }
@@ -258,10 +260,9 @@ function reducerFactory(t) {
             failed: false,
             confirmed: true
           }
-        });
 
-        // Remove the thing from any collections containing it
-        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
+          // Remove the thing from any collections containing it
+        });collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return _extends({}, collection, {
             data: collection.data.filter(function (thing) {
               return thing.id !== action.id;
@@ -329,10 +330,9 @@ function reducerFactory(t) {
             failed: false,
             confirmed: true
           }
-        });
 
-        // Update the things inside of collections
-        collections = (0, _lodash.mapValues)(state.collections, function (collection) {
+          // Update the things inside of collections
+        });collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return _extends({}, collection, {
             data: collection.data.map(function (thing) {
               return thing.id === action.id ? action.data : thing;
@@ -360,9 +360,8 @@ function reducerFactory(t) {
 
         return _extends({}, state, {
           things: things
-        });
-      // Real time actions
-      case t.INSERT:
+          // Real time actions
+        });case t.INSERT:
         collections = _extends({}, state.collections);
         collections = (0, _lodash.mapValues)(state.collections, function (collection) {
           return collection.subscribeFilter && collection.subscribeFilter(action.data) ? _extends({}, collection, {

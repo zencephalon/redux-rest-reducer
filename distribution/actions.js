@@ -99,11 +99,14 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref$sortOrder = _ref.sortOrder,
           sortOrder = _ref$sortOrder === undefined ? ['orderInList', 'firstName', 'name', 'id'] : _ref$sortOrder,
-          subscribeFilter = _ref.subscribeFilter;
+          subscribeFilter = _ref.subscribeFilter,
+          _ref$shouldUpdateThin = _ref.shouldUpdateThings,
+          shouldUpdateThings = _ref$shouldUpdateThin === undefined ? false : _ref$shouldUpdateThin;
 
       return {
         params: params,
         subscribeFilter: subscribeFilter,
+        shouldUpdateThings: shouldUpdateThings,
         data: sortOrder ? (0, _lodash.sortBy)(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now()
@@ -118,12 +121,13 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
     INDEX: function INDEX(id) {
       var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
           sortOrder = _ref2.sortOrder,
-          subscribeFilter = _ref2.subscribeFilter;
+          subscribeFilter = _ref2.subscribeFilter,
+          shouldUpdateThings = _ref2.shouldUpdateThings;
 
       return function (dispatch) {
         dispatch(action.INDEX.REQUEST(id));
         return api.INDEX(id).then(function (json) {
-          return dispatch(action.INDEX.CONFIRM(id, resultFunc(json), { sortOrder: sortOrder, subscribeFilter: subscribeFilter }));
+          return dispatch(action.INDEX.CONFIRM(id, resultFunc(json), { sortOrder: sortOrder, subscribeFilter: subscribeFilter, shouldUpdateThings: shouldUpdateThings }));
         }).catch(function (e) {
           dispatch(action.INDEX.FAIL(id, e));
           dispatch({ type: 'ERROR', e: e });
@@ -163,10 +167,9 @@ var actionFactory = exports.actionFactory = function actionFactory(stateName, t,
       return function (dispatch, getState) {
         var _ref4 = getState()[stateName].http.things[id] || {
           GET: { requested: false }
+          // If we already have an on-going request just wait for it to finish
         },
             requested = _ref4.GET.requested;
-        // If we already have an on-going request just wait for it to finish
-
 
         if (requested) {
           var queuePromise = new Promise(function (resolve) {

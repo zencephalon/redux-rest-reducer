@@ -85,10 +85,12 @@ export const actionFactory = (stateName, t, api, resultFunc = json => json) => {
     CONFIRM: (params, data, {
       sortOrder = ['orderInList', 'firstName', 'name', 'id'],
       subscribeFilter,
+      shouldUpdateThings = false,
     } = {}) => (
       {
         params,
         subscribeFilter,
+        shouldUpdateThings,
         data: sortOrder ? sortBy(data, sortOrder) : data,
         type: t.INDEX.CONFIRM,
         receivedAt: Date.now(),
@@ -100,12 +102,12 @@ export const actionFactory = (stateName, t, api, resultFunc = json => json) => {
   }
 
   const promise = {
-    INDEX: (id, { sortOrder, subscribeFilter } = {}) => (
+    INDEX: (id, { sortOrder, subscribeFilter, shouldUpdateThings } = {}) => (
       dispatch => {
         dispatch(action.INDEX.REQUEST(id))
         return api.INDEX(id)
           .then(json => dispatch(action.INDEX.CONFIRM(id, resultFunc(json),
-            { sortOrder, subscribeFilter })))
+            { sortOrder, subscribeFilter, shouldUpdateThings })))
           .catch(e => {
             dispatch(action.INDEX.FAIL(id, e))
             dispatch({ type: 'ERROR', e })

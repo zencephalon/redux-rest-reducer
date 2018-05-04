@@ -159,18 +159,21 @@ export function reducerFactory(t) {
         collections = { ...state.collections }
         things = { ...state.things }
 
-        for (const datum of action.data) {
-          if (!things[datum.id]) {
-            things[datum.id] = thingDefault()
-          }
-          things[datum.id].data = datum
+        if (action.shouldUpdateThings) {
+          for (const datum of action.data) {
+            if (!things[datum.id]) {
+              things[datum.id] = thingDefault()
+            }
+            things[datum.id].data = datum
 
-          // should we do this? maybe not...
-          if (!things[datum.id].GET) {
-            things[datum.id].GET = methodDefault()
+            // should we do this? maybe not...
+            if (!things[datum.id].GET) {
+              things[datum.id].GET = methodDefault()
+            }
+            things[datum.id].GET.confirmed = true
           }
-          things[datum.id].GET.confirmed = true
         }
+
         collections[action.params] = {
           data: action.data,
           requested: false,
